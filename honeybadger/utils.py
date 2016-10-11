@@ -11,6 +11,6 @@ class StringReprJSONEncoder(json.JSONEncoder):
 def filter_dict(data, filter_keys):
     # filter_keys = set(data.keys())
     for key in filter_keys:
-        if data.has_key(key):
+        if key in data:
             data[key] = "[FILTERED]"
     return data
