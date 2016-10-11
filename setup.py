@@ -1,7 +1,9 @@
+from codecs import open
+
 from setuptools import setup
 import re
 def get_version():
-    with open('honeybadger/version.py', 'rb') as f:
+    with open('honeybadger/version.py', encoding='utf-8') as f:
         return re.search(r'^__version__ = [\'"]([^\'"]+)[\'"]', f.read(), re.M).group(1)
 
 setup(
