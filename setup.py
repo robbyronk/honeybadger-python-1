@@ -1,9 +1,12 @@
 from setuptools import setup
-import honeybadger
+import re
+def get_version():
+    with open('honeybadger/version.py', 'rb') as f:
+        return re.search(r'^__version__ = [\'"]([^\'"]+)[\'"]', f.read(), re.M).group(1)
 
 setup(
     name='honeybadger',
-    version=honeybadger.__version__,
+    version=get_version(),
     description='Send Python and Django errors to Honeybadger',
     url='https://github.com/honeybadger-io/honeybadger-python',
     author='Dave Sullivan',
