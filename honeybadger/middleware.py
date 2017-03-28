@@ -2,8 +2,10 @@ from honeybadger import honeybadger
 from six import iteritems
 
 try:
+    # Support for Django 1.10...
     from django.utils.deprecation import MiddlewareMixin
 except ImportError:
+    # ...while maintaining support for Django <= 1.9.
     class MiddlewareMixin(object):
         def __init__(self, get_response=None):
             pass
