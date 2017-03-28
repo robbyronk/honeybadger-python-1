@@ -1,8 +1,18 @@
 from honeybadger import honeybadger
 from six import iteritems
 
-class DjangoHoneybadgerMiddleware(object):
-    def __init__(self):
+try:
+    # Support for Django 1.10...
+    from django.utils.deprecation import MiddlewareMixin
+except ImportError:
+    # ...while maintaining support for Django <= 1.9.
+    class MiddlewareMixin(object):
+        def __init__(self, get_response=None):
+            pass
+
+class DjangoHoneybadgerMiddleware(MiddlewareMixin):
+    def __init__(self, get_response=None):
+        super(DjangoHoneybadgerMiddleware, self).__init__(get_response=get_response)
         from django.conf import settings
         if getattr(settings, 'DEBUG'):
             honeybadger.configure(environment='development')
