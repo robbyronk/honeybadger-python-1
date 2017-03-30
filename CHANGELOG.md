@@ -5,6 +5,18 @@ adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased][unreleased]
 
+## [0.0.6] - 2017-03-27
+### Fixed
+- Added support for Django 1.10 middleware changes.
+
+## [0.0.5] - 2016-10-11
+### Fixed
+- Python 3 setup.py bug.
+
+## [0.0.4] - 2016-10-11
+### Fixed
+- setup.py version importing bug.
+
 ## [0.0.3] - 2016-10-11
 ### Fixed
 - Python 3 bug in `utils.filter_dict` - vineesha
