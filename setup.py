@@ -27,5 +27,5 @@ setup(
         'six'
     ],
     test_suite='nose.collector',
-    tests_require=['nose', 'mock']
+    tests_require=['nose', 'mock', 'testfixtures']
 )
