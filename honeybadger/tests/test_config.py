@@ -30,3 +30,22 @@ def test_config_var_types_are_accurate():
 def test_can_only_set_valid_options():
     c = Configuration(foo='bar')
     print(c.foo)
+
+def test_valid_dev_environments():
+    valid_dev_environments = ['development', 'dev', 'test']
+
+    assert len(Configuration.DEVELOPMENT_ENVIRONMENTS) == len(valid_dev_environments)
+    assert set(Configuration.DEVELOPMENT_ENVIRONMENTS) == set(valid_dev_environments)
+
+def test_is_dev_true_for_dev_environments():
+    for env in Configuration.DEVELOPMENT_ENVIRONMENTS:
+        c = Configuration(environment=env)
+        assert c.is_dev()
+
+def test_is_dev_false_for_non_dev_environments():
+    c = Configuration(environment='production')
+    assert c.is_dev() == False
+
+def test_force_report_data_not_active():
+    c = Configuration()
+    assert c.force_report_data == False
