@@ -8,8 +8,6 @@ from honeybadger import Honeybadger
 from mock import MagicMock, patch
 
 
-
-
 def test_set_context():
     honeybadger = Honeybadger()
     honeybadger.set_context(foo='bar')
