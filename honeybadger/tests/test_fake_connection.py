@@ -11,5 +11,5 @@ def test_send_notice_logging(l):
     send_notice(config, payload)
 
     l.check(
-        ('honeybadger.fake_connection', 'INFO', 'Using a fake connection. Will not make a real call to Honeybadger API'),
-        ('honeybadger.fake_connection', 'INFO', 'The config used is {} with paylod {}'.format(config, payload)))
+        ('honeybadger.fake_connection', 'INFO', 'Development mode is enabled; this error will be reported if it occurs after you deploy your app.'),
+        ('honeybadger.fake_connection', 'DEBUG', 'The config used is {} with paylod {}'.format(config, payload)))
