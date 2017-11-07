@@ -40,6 +40,8 @@ class Configuration(object):
                     val = val.split(',')
                 elif option_types[option] is int:
                     val = int(val)
+                elif option_types[option] is bool:
+                    val = bool(val)
             except:
                 pass
 
