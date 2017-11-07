@@ -17,6 +17,9 @@ Install honeybadger with pip.
 
 `$ pip install honeybadger`
 
+**Note:** Honeybadger does *not* report errors in development and test
+environments by default. To enable reporting in development environments, see
+the `force_report_data` setting.
 
 ### Django
 
@@ -109,6 +112,7 @@ The following options are available to you:
 | hostname | `str` | The hostname of the current server. | `"badger01"` | `HONEYBADGER_HOSTNAME` |
 | endpoint | `str` | `"https://api.honeybadger.io"` | `"https://honeybadger.example.com/"` | `HONEYBADGER_ENDPOINT` |
 | params_filters | `list` | `['password', 'password_confirmation', 'credit_card']` | `['super', 'secret', 'keys']` | `HONEYBADGER_PARAMS_FILTERS` |
+| force_report_data | `bool` | `False` | `True` | `HONEYBADGER_FORCE_REPORT_DATA` |
 
 ## Public Methods
 
