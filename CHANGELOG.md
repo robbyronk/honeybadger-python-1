@@ -5,6 +5,11 @@ adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased][unreleased]
 
+## [0.1.0] - 2017-11-03
+### Added
+- Block calls to honeybadger server when development like environment unless 
+  explicitly forced.
+
 ## [0.0.6] - 2017-03-27
 ### Fixed
 - Added support for Django 1.10 middleware changes.

@@ -4,7 +4,8 @@ import sys
 import logging
 import copy
 
-from .connection import send_notice
+import honeybadger.connection as connection
+import honeybadger.fake_connection as fake_connection
 from .payload import create_payload
 from .config import Configuration
 
@@ -19,7 +20,10 @@ class Honeybadger(object):
 
     def _send_notice(self, exception, exc_traceback=None, context={}):
         payload = create_payload(exception, exc_traceback, request=self.thread_local.request, config=self.config, context=context)
-        send_notice(self.config, payload)
+        if self.config.is_dev() and not self.config.force_report_data:
+            fake_connection.send_notice(self.config, payload)
+        else:
+            connection.send_notice(self.config, payload)
 
     def begin_request(self, request):
         self.thread_local.request = request
