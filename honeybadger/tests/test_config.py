@@ -21,10 +21,14 @@ def test_args_overrides_12factor():
 
 def test_config_var_types_are_accurate():
     os.environ['HONEYBADGER_PARAMS_FILTERS'] = 'password,password_confirm,user_email'
-    os.environ['HONEYBADGER_TRACE_THRESHOLD'] = '2500'
     c = Configuration()
     assert c.params_filters == ['password', 'password_confirm', 'user_email']
-    assert c.trace_threshold == 2500
+
+def test_config_bool_types_are_accurate():
+    os.environ['HONEYBADGER_FORCE_REPORT_DATA'] = '1'
+    c = Configuration()
+    del os.environ['HONEYBADGER_FORCE_REPORT_DATA']
+    assert c.force_report_data == True
 
 @raises(AttributeError)
 def test_can_only_set_valid_options():
