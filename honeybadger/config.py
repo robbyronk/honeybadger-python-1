@@ -13,7 +13,6 @@ class Configuration(object):
         ('hostname', str),
         ('endpoint', str),
         ('params_filters', list),
-        ('trace_threshold', int),
         ('force_report_data', bool),
     )
 
@@ -24,7 +23,6 @@ class Configuration(object):
         self.hostname = socket.gethostname()
         self.endpoint = 'https://api.honeybadger.io'
         self.params_filters = ['password', 'password_confirmation', 'credit_card']
-        self.trace_threshold = 2000
         self.force_report_data = False
 
         self.set_12factor_config()
