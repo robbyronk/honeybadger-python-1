@@ -12,4 +12,4 @@ def test_send_notice_logging(l):
 
     l.check(
         ('honeybadger.fake_connection', 'INFO', 'Development mode is enabled; this error will be reported if it occurs after you deploy your app.'),
-        ('honeybadger.fake_connection', 'DEBUG', 'The config used is {} with paylod {}'.format(config, payload)))
+        ('honeybadger.fake_connection', 'DEBUG', 'The config used is {} with payload {}'.format(config, payload)))
