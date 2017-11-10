@@ -211,6 +211,15 @@ If you're adding a new feature, please [submit an issue](https://github.com/hone
 
 See https://github.com/honeybadger-io/honeybadger-python/blob/master/CHANGELOG.md
 
+## Publishing a release on PyPI
+
+1. Ensure the latest version of twine is installed with `pip install --upgrade twine`
+2. Update the version in honeybadger/version.py
+3. Ensure all of your changes are committed
+4. Clean out the existing dist dir with `rm -rf dist/`
+5. Run `python setup.py bdist_wheel` which will build the distribution files in dist/
+6. Run `twine upload dist/*` to upload the release to PyPI
+
 ## License
 
 This project is MIT licensed. See the [LICENSE](https://github.com/honeybadger-io/honeybadger-python/blob/master/LICENSE) file in this repository for details.
