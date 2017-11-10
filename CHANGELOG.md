@@ -4,13 +4,14 @@ CHANGELOG](http://keepachangelog.com/) for how to update this file. This project
 adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased][unreleased]
-### Changed
-- Remove unused `trace_threshold` config option.
 
 ## [0.1.0] - 2017-11-03
 ### Added
 - Block calls to honeybadger server when development like environment unless 
   explicitly forced.
+
+### Changed
+- Remove unused `trace_threshold` config option.
 
 ## [0.0.6] - 2017-03-27
 ### Fixed
