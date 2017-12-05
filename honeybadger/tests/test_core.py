@@ -1,4 +1,5 @@
 import json
+import threading
 
 from nose.tools import eq_, ok_
 from nose.tools import raises
@@ -15,11 +16,27 @@ def test_set_context():
     honeybadger.set_context(bar='foo')
     eq_(honeybadger.thread_local.context, dict(foo='bar', bar='foo'))
 
+def test_threading():
+    hb = Honeybadger()
+
+    with patch('honeybadger.fake_connection.send_notice', side_effect=MagicMock(return_value=True)) as fake_connection:
+        def notifier():
+            try:
+                raise ValueError('Failure')
+            except ValueError as e:
+                hb.notify(e)
+
+        hb.configure(api_key='aaa')
+
+        notify_thread = threading.Thread(target=notifier)
+        notify_thread.start()
+        notify_thread.join()
+        assert fake_connection.call_count == 1
 
 def test_notify_fake_connection_dev_environment():
     hb = Honeybadger()
     hb.configure(api_key='aaa')
-    with patch('honeybadger.fake_connection.send_notice', side_effect=MagicMock(return_value=True)) as fake_connection:
+    with patch('honeybadger.fake_connectiogn.send_notice', side_effect=MagicMock(return_value=True)) as fake_connection:
         with patch('honeybadger.connection.send_notice', side_effect=MagicMock(return_value=True)) as connection:
             hb.notify(error_class='Exception', error_message='Test message.', context={'foo': 'bar'})
 
