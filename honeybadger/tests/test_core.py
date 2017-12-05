@@ -36,7 +36,7 @@ def test_threading():
 def test_notify_fake_connection_dev_environment():
     hb = Honeybadger()
     hb.configure(api_key='aaa')
-    with patch('honeybadger.fake_connectiogn.send_notice', side_effect=MagicMock(return_value=True)) as fake_connection:
+    with patch('honeybadger.fake_connection.send_notice', side_effect=MagicMock(return_value=True)) as fake_connection:
         with patch('honeybadger.connection.send_notice', side_effect=MagicMock(return_value=True)) as connection:
             hb.notify(error_class='Exception', error_message='Test message.', context={'foo': 'bar'})
 
