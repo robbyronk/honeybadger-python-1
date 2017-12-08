@@ -5,6 +5,10 @@ adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased][unreleased]
 
+## [0.1.1] - 2017-12-08
+### Changed
+- Changed how thread local variables are handled in order to fix issues with threads losing honeybadger config data
+
 ## [0.1.0] - 2017-11-03
 ### Added
 - Block calls to honeybadger server when development like environment unless 
