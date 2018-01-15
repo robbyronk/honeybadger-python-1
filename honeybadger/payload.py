@@ -44,7 +44,7 @@ def error_payload(exception, exc_traceback, config):
         'source': {}
     }
 
-    if len(tb) > 0:
+    if len(tb) > 0 and os.path.isfile(tb[-1][0]):
         with open(tb[-1][0], 'rt', encoding='utf-8') as f:
             contents = f.readlines()
 
