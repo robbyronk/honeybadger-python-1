@@ -59,6 +59,16 @@ def test_error_payload_source_line_midfile():
         eq_(traceback_mock.call_count, 1)
         eq_(payload['source'], expected)
 
+
+@patch('os.path.isfile', return_value=False)
+def test_error_payload_source_missing_file(_isfile):
+    with mock_traceback(line_no=5) as traceback_mock:
+        config = Configuration()
+        payload = error_payload(
+            dict(error_class='Exception', error_message='Test'), None, config)
+        eq_(payload['source'], {})
+
+
 def test_server_payload():
     config = Configuration(project_root=os.path.dirname(__file__), environment='test', hostname='test.local')
     payload = server_payload(config)
