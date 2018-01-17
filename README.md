@@ -213,7 +213,7 @@ See https://github.com/honeybadger-io/honeybadger-python/blob/master/CHANGELOG.m
 
 ## Publishing a release on PyPI
 
-1. Ensure the latest version of twine is installed with `pip install --upgrade twine`
+1. Ensure the latest version of twine is installed with `pip install --upgrade twine wheel`
 2. Update the version in honeybadger/version.py
 3. Ensure all of your changes are committed
 4. Clean out the existing dist dir with `rm -rf dist/`
