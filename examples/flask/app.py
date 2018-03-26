@@ -19,7 +19,7 @@ app.config['HONEYBADGER_PARAMS_FILTERS'] = 'password, secret, credit-card'
 FlaskHoneybadger(app, report_exceptions=True)
 
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST', 'PUT'])
 def index():
     a = int(request.args.get('a'))
     b = int(request.args.get('b'))

@@ -149,7 +149,8 @@ class FlaskHoneybadger(object):
         honeybadger_config = {}
         for key, value in iteritems(config):
             if key.startswith(self.CONFIG_PREFIX):
-                honeybadger_config[key[len(self.CONFIG_PREFIX):]] = value
+                honeybadger_config[key[len(self.CONFIG_PREFIX):].lower()] = value
+
         honeybadger.configure(**honeybadger_config)
         honeybadger.config.set_12factor_config()  # environment should override Flask settings
 

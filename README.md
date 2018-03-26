@@ -105,6 +105,14 @@ behavior, you can set `report_exceptions` to False and just call `honeybadger.no
 
 You can also check more examples under directory `examples`.
 
+#### Component naming in Flask
+
+The following conventions are used for component names:
+
+- When using view functions, the name of the component will be _\<module name>___#___\<view name>_
+- For class-based views, the name of the component will be _\<module name>___#___\<class name>_
+- When using blueprints, the name of the component will be  _\<module name>___#___\<blueprint name>_._\<view name>_
+
 ### Other frameworks / plain Python app
 
 Django and Flask are the only explicitly supported frameworks at the moment. For other frameworks (tornado, web2py, etc.) or a plain Python script, simply import honeybadger and configure it with your API key. Honeybadger uses a global exception hook to automatically report any uncaught exceptions.
