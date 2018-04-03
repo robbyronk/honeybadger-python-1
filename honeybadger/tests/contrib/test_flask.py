@@ -1,18 +1,22 @@
 import unittest
 
-import flask
-import werkzeug
-from flask import Blueprint
-from flask.views import MethodView
+import sys
 from mock import patch
 
 from honeybadger import honeybadger
 from honeybadger.config import Configuration
 from honeybadger.contrib.flask import FlaskPlugin, FlaskHoneybadger
 
+PY3_2 = sys.version_info[0:2] == (3, 2)
+
 
 class FlaskPluginTestCase(unittest.TestCase):
     def setUp(self):
+        if PY3_2:
+            self.skipTest(
+                'Flask requires Python3 > 3.2. More info at http://flask.pocoo.org/docs/0.12/python3/#requirements')
+        import flask
+
         self.config = Configuration()
 
         self.app = flask.Flask(__name__)
@@ -114,6 +118,13 @@ class FlaskPluginTestCase(unittest.TestCase):
 class FlaskHoneybadgerTestCase(unittest.TestCase):
 
     def setUp(self):
+        if PY3_2:
+            self.skipTest(
+                'Flask requires Python3 > 3.2. More info at http://flask.pocoo.org/docs/0.12/python3/#requirements')
+
+        import flask
+        import werkzeug
+
         self.default_headers = {
            'Content-Length': '0',
            'Host': 'localhost',
@@ -155,7 +166,9 @@ class FlaskHoneybadgerTestCase(unittest.TestCase):
 
     @patch('honeybadger.contrib.flask.honeybadger')
     def test_auto_report_exceptions_with_blueprint(self, mock_hb):
+        from flask import Blueprint
         FlaskHoneybadger(self.app, report_exceptions=True)
+
         bp = Blueprint('blueprint', __name__)
 
         @bp.route('/error')
@@ -170,6 +183,8 @@ class FlaskHoneybadgerTestCase(unittest.TestCase):
 
     @patch('honeybadger.contrib.flask.honeybadger')
     def test_auto_report_exceptions_with_view_class(self, mock_hb):
+        from flask.views import MethodView
+
         FlaskHoneybadger(self.app, report_exceptions=True)
 
         class ErrorView(MethodView):
@@ -183,6 +198,8 @@ class FlaskHoneybadgerTestCase(unittest.TestCase):
 
     @patch('honeybadger.contrib.flask.honeybadger')
     def test_dont_reset_context_with_exception(self, mock_hb):
+        from flask.views import MethodView
+
         FlaskHoneybadger(self.app, report_exceptions=True, reset_context_after_request=False)
 
         honeybadger.set_context(foo='bar')
@@ -200,6 +217,8 @@ class FlaskHoneybadgerTestCase(unittest.TestCase):
 
     @patch('honeybadger.contrib.flask.honeybadger')
     def test_dont_reset_context_when_not_reporting(self, mock_hb):
+        from flask.views import MethodView
+
         FlaskHoneybadger(self.app, report_exceptions=False, reset_context_after_request=False)
 
         honeybadger.set_context(foo='bar')
@@ -217,6 +236,8 @@ class FlaskHoneybadgerTestCase(unittest.TestCase):
 
     @patch('honeybadger.contrib.flask.honeybadger')
     def test_reset_context_when_not_reporting(self, mock_hb):
+        from flask.views import MethodView
+
         FlaskHoneybadger(self.app, report_exceptions=False, reset_context_after_request=True)
 
         honeybadger.set_context(foo='bar')
@@ -234,6 +255,8 @@ class FlaskHoneybadgerTestCase(unittest.TestCase):
 
     @patch('honeybadger.contrib.flask.honeybadger')
     def test_reset_context_when_reporting(self, mock_hb):
+        from flask.views import MethodView
+
         FlaskHoneybadger(self.app, report_exceptions=True, reset_context_after_request=True)
 
         honeybadger.set_context(foo='bar')
