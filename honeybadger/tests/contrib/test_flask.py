@@ -38,7 +38,9 @@ class FlaskPluginTestCase(unittest.TestCase):
         self.assertFalse(self.plugin.supports(self.config, {}))
 
     def test_get_request_with_headers(self):
-        with self.app.test_request_context('/test', 'http://server:1234/path', 'a=1&a=2&foo=bar',
+        with self.app.test_request_context(path='/test',
+                                           base_url='http://server:1234/path',
+                                           query_string='a=1&a=2&foo=bar',
                                            headers={
                                                'X-Wizard-Color': 'grey'
                                            }):
@@ -58,7 +60,7 @@ class FlaskPluginTestCase(unittest.TestCase):
             self.assertDictEqual(payload['context'], {'k': 'value'})
 
     def test_get_request_with_session(self):
-        with self.app.test_request_context('/test', 'http://server:1234/path') as ctx:
+        with self.app.test_request_context(path='/test', base_url='http://server:1234/path') as ctx:
             ctx.session['answer'] = 42
             ctx.session['password'] = 'this is fine'
 
@@ -77,7 +79,7 @@ class FlaskPluginTestCase(unittest.TestCase):
             self.assertDictEqual(payload['context'], {'k': 'value'})
 
     def test_post_request(self):
-        with self.app.test_request_context('/test', 'http://server:1234/path', method='POST',
+        with self.app.test_request_context(path='/test', base_url='http://server:1234/path', method='POST',
                                            data={'foo': 'bar', 'password': 'this is file'}):
 
             payload = self.plugin.generate_payload(self.config, {'k': 'value'})
@@ -96,7 +98,7 @@ class FlaskPluginTestCase(unittest.TestCase):
             self.assertDictEqual(payload['context'], {'k': 'value'})
 
     def test_put_request(self):
-        with self.app.test_request_context('/test', 'http://server:1234/path', method='PUT',
+        with self.app.test_request_context(path='/test', base_url='http://server:1234/path', method='PUT',
                                            data={'foo': 'bar', 'password': 'this is file'}):
 
             payload = self.plugin.generate_payload(self.config, {'k': 'value'})
