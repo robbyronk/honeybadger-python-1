@@ -1,6 +1,6 @@
 import re
 
-from six.__init__ import iteritems
+from six import iteritems
 
 from honeybadger import honeybadger
 from honeybadger.plugins import Plugin, default_plugin_manager
