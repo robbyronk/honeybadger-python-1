@@ -3,9 +3,13 @@ import unittest
 from django.conf.urls import url
 from django.http import JsonResponse
 from django.test import RequestFactory
+from mock import patch, Mock
 
+from honeybadger import honeybadger
 from honeybadger.config import Configuration
-from honeybadger.contrib.django import DjangoPlugin, clear_request, set_request
+from honeybadger.contrib import DjangoHoneybadgerMiddleware
+from honeybadger.contrib.django import DjangoPlugin, clear_request, set_request, current_request
+from honeybadger.tests.test_middleware import view
 
 
 def view(request):
@@ -64,3 +68,38 @@ class DjangoPluginTestCase(unittest.TestCase):
         self.assertEqual(payload['action'], 'view')
         self.assertDictEqual(payload['session'], {'lang': 'en'})
         self.assertDictEqual(payload['context'], {'foo': 'bar'})
+
+
+class DjangoMiddlewareTestCase(unittest.TestCase):
+    def setUp(self):
+        self.rf = RequestFactory()
+        self.url = url(r'test', view, name='test_view')
+        self.middleware = DjangoHoneybadgerMiddleware()
+
+    def tearDown(self):
+        clear_request()
+
+    def test_process_request(self):
+        request = self.rf.get('test')
+        self.middleware.process_request(request)
+        self.assertEqual(request, current_request())
+
+    @patch('honeybadger.middleware.honeybadger')
+    def test_process_exception(self, mock_hb):
+        request = self.rf.get('test')
+        self.middleware.process_request(request)
+        exc = ValueError('test exception')
+        self.middleware.process_exception(request, exc)
+
+        mock_hb.notify.assert_called_with(exc)
+        self.assertIsNone(current_request(), msg='Current request should be cleared after exception handling')
+
+    def test_process_response(self):
+        request = self.rf.get('test')
+        response = Mock()
+        honeybadger.set_context(foo='bar')
+        self.middleware.process_request(request)
+
+        self.middleware.process_response(request, response)
+        self.assertDictEqual({}, honeybadger._get_context(), msg='Context should be cleared after response handling')
+        self.assertIsNone(current_request(), msg='Current request should be cleared after response handling')

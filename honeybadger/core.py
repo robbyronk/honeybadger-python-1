@@ -11,6 +11,7 @@ from .config import Configuration
 
 logging.getLogger('honeybadger').addHandler(logging.NullHandler())
 
+
 class Honeybadger(object):
     def __init__(self):
         self.config = Configuration()
