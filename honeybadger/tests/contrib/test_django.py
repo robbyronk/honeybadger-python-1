@@ -9,7 +9,6 @@ from honeybadger import honeybadger
 from honeybadger.config import Configuration
 from honeybadger.contrib import DjangoHoneybadgerMiddleware
 from honeybadger.contrib.django import DjangoPlugin, clear_request, set_request, current_request
-from honeybadger.tests.test_middleware import view
 
 
 def view(request):
@@ -80,13 +79,15 @@ class DjangoMiddlewareTestCase(unittest.TestCase):
         clear_request()
 
     def test_process_request(self):
-        request = self.rf.get('test')
+        request = self.rf.get('/test')
+        request.resolver_match = self.url.resolve('test')
         self.middleware.process_request(request)
         self.assertEqual(request, current_request())
 
-    @patch('honeybadger.middleware.honeybadger')
+    @patch('honeybadger.contrib.django.honeybadger')
     def test_process_exception(self, mock_hb):
         request = self.rf.get('test')
+        request.resolver_match = self.url.resolve('test')
         self.middleware.process_request(request)
         exc = ValueError('test exception')
         self.middleware.process_exception(request, exc)
@@ -96,6 +97,7 @@ class DjangoMiddlewareTestCase(unittest.TestCase):
 
     def test_process_response(self):
         request = self.rf.get('test')
+        request.resolver_match = self.url.resolve('test')
         response = Mock()
         honeybadger.set_context(foo='bar')
         self.middleware.process_request(request)
