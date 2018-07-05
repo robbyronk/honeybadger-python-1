@@ -25,9 +25,12 @@ class FlaskPlugin(Plugin):
         :param context: current honeybadger configuration.
         :return: True if this is a django request, False else.
         """
-        from flask import request
-
-        return bool(request)
+        try:
+            from flask import request
+        except ImportError:
+            return False
+        else:
+            return bool(request)
 
     def generate_payload(self, config, context):
         """
