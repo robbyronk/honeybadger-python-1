@@ -5,6 +5,17 @@ adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased][unreleased]
 
+## [0.2.0] - 2018-07-18
+### Added
+- Added Plugin system so users can extend the Honeybadger library to any framework (thanks @ifoukarakis!)
+- Added Flask support (@ifoukarakis)
+### Changed
+- Moved DjangoHoneybadgerMiddleware to contrib.django and added DeprecationWarning at old import path
+
+## [0.1.2] - 2018-01-16
+### Fixed
+- Fixed issue with exception reporting failing when stacktrace includes a non-file source path (eg. Cython extension) 
+
 ## [0.1.1] - 2017-12-08
 ### Changed
 - Changed how thread local variables are handled in order to fix issues with threads losing honeybadger config data
