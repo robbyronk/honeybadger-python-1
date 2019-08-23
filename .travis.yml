@@ -3,11 +3,13 @@ python:
   - 2.7
   - 3.4
   - 3.5
-  - 3.6
   - 3.7
+env:
+  - DJANGO_VERSION=1.11.23
+  - DJANGO_VERSION=2.1.11
+  - DJANGO_VERSION=2.2.4
 install:
-  - pip install psutil six
-  - ./scripts/install_frameworks.sh
+  - pip install psutil six Django==$DJANGO_VERSION
   - python setup.py develop
 env:
   - DJANGO_VERSION=1.11.25
