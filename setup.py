@@ -1,18 +1,20 @@
 import re
 import sys
-
+import os
 from codecs import open
 from setuptools import setup
 
+DJANGO_VERSION = os.environ.get('DJANGO_VERSION', '1.11')
+FLASK_VERSION  = os.environ.get('FLASK_VERSION', '1.0')
 
-tests_require = ['nose', 'mock', 'testfixtures', 'Flask>=1.0', 'blinker']
+tests_require = ['nose', 'mock', 'testfixtures', 'Flask>={}'.format(FLASK_VERSION), 'blinker']
 
 # For some reason, Django 2.2.5 gets installed for Python 3.4, but breaks.
 # Python 3.4 is not officially supported by the 2.2 series, so not sure what's going on here.
 if sys.version_info[0:2] == (3, 4):
-    tests_require.append('django==1.11')
+    tests_require.append('django=={}'.format(DJANGO_VERSION))
 else:
-    tests_require.append('django>=1.11')
+    tests_require.append('django>={}'.format(DJANGO_VERSION))
     
 def get_version():
     with open('honeybadger/version.py', encoding='utf-8') as f:
