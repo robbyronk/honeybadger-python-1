@@ -25,6 +25,8 @@ matrix:
       env: DJANGO_VERSION=2.1.13
     - python: 3.4
       env: DJANGO_VERSION=2.2.6
+    - python: 3.4
+      env: FLASK_VERSION=1.1.1
 script: python setup.py test
 notifications:
   slack:
