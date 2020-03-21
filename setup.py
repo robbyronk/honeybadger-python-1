@@ -6,13 +6,15 @@ from setuptools import setup
 
 tests_require = ['nose', 'mock', 'testfixtures', 'blinker', 'Flask>=1.0']
 
-if sys.version_info[0:2] <= (3, 5):
+if sys.version_info[0:2] == (2, 7):
+    tests_require.append('Django==1.11')
+elif sys.version_info[0:2] <= (3, 5):
     tests_require.append('Django>=1.11,<=2.2')
 else:
     tests_require.append('Django>3.0,<4.0')
 
 # Ugly fix for testfixtures on Python 3.2
-if PY32:
+if sys.version_info[0:2] == (3, 2):
     tests_require.remove('testfixtures')
     tests_require.append('testfixtures==5.3.1')
 
