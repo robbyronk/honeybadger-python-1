@@ -5,6 +5,7 @@ from mock import Mock
 import sys
 
 from django.conf.urls import url
+from django.conf import settings
 from django.test import RequestFactory
 from django.test import SimpleTestCase
 from django.test import override_settings
@@ -19,10 +20,14 @@ from honeybadger.contrib.django import clear_request
 from honeybadger.contrib.django import set_request
 from honeybadger.contrib.django import current_request
 
-from .django.views import plain_view
-from .django.views import always_fails
+from .django_test_app.views import plain_view
+from .django_test_app.views import always_fails
 from ..utils import mock_urlopen
 
+try:
+    settings.configure()
+except:
+    pass
 
 def versions_match():
     import django
@@ -126,12 +131,11 @@ class DjangoMiddlewareTestCase(unittest.TestCase):
         self.assertDictEqual({}, honeybadger._get_context(), msg='Context should be cleared after response handling')
         self.assertIsNone(current_request(), msg='Current request should be cleared after response handling')
 
+
 @override_settings(
-    ROOT_URLCONF='honeybadger.tests.contrib.django.urls'
+    ROOT_URLCONF='honeybadger.tests.contrib.django_test_app.urls',
+    MIDDLEWARE=['honeybadger.contrib.django.DjangoHoneybadgerMiddleware']
 )
-@modify_settings(MIDDLEWARE={
-    'prepend': ['honeybadger.contrib.django.DjangoHoneybadgerMiddleware']
-})
 class DjangoMiddlewareIntegrationTestCase(SimpleTestCase):
     def setUp(self):
         self.client = Client()
