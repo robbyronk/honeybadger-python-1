@@ -4,12 +4,6 @@ import os
 from codecs import open
 from setuptools import setup
 
-# Django 2.2 requires at least Python 3.5
-PY32     = sys.version_info == (3, 2) 
-LT_PY35  = sys.version_info < (3, 5)
-GTE_PY35 = sys.version_info >= (3, 5)
-GTE_PY36 = sys.version_info >= (3, 6)
-
 tests_require = ['nose', 'mock', 'testfixtures', 'blinker', 'Flask>=1.0']
 
 if sys.version_info[0:2] <= (3, 5):
