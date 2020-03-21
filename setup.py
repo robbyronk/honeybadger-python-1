@@ -10,14 +10,12 @@ LT_PY35  = sys.version_info < (3, 5)
 GTE_PY35 = sys.version_info >= (3, 5)
 GTE_PY36 = sys.version_info >= (3, 6)
 
-tests_require = ['nose', 'mock', 'testfixtures', 'Flask>=0.8', 'blinker']
+tests_require = ['nose', 'mock', 'testfixtures', 'blinker', 'Flask>=1.0']
 
-if LT_PY35:
-    tests_require.append('django==1.11')
-elif GTE_PY35:
-    tests_require.append('django>=2.2')
-elif GTE_PY36:
-    tests_require.append('django>=3.0')
+if sys.version_info[0:2] <= (3, 5):
+    tests_require.append('Django>=1.11,<=2.2')
+else:
+    tests_require.append('Django>3.0,<4.0')
 
 # Ugly fix for testfixtures on Python 3.2
 if PY32:
