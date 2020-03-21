@@ -2,6 +2,7 @@ import unittest
 import json
 from mock import patch
 from mock import Mock
+import sys
 
 from django.conf.urls import url
 from django.test import RequestFactory
@@ -23,6 +24,20 @@ from .django.views import always_fails
 from ..utils import mock_urlopen
 
 
+def versions_match():
+    import django
+
+    VERSION_MATRIX = {
+        '1.11': sys.version_info >= (2, 7),
+        '2.2':  sys.version_info >= (3, 5),
+        '3.0':  sys.version_info >= (3, 6),
+        '3.1':  sys.version_info >= (3, 6)
+    }
+
+    for django_version, supported in VERSION_MATRIX.items():
+        if django.__version__.startswith(django_version) and supported:
+            return True
+    return False
 
 class DjangoPluginTestCase(unittest.TestCase):
     def setUp(self):
@@ -82,36 +97,32 @@ class DjangoMiddlewareTestCase(unittest.TestCase):
     def setUp(self):
         self.rf = RequestFactory()
         self.url = url(r'test', plain_view, name='test_view')
-        self.middleware = DjangoHoneybadgerMiddleware()
 
     def tearDown(self):
         clear_request()
 
-    def test_process_request(self):
-        request = self.rf.get('/test')
-        request.resolver_match = self.url.resolve('test')
-        self.middleware.process_request(request)
-        self.assertEqual(request, current_request())
+    def get_response(self, request):
+        return Mock()
 
     @patch('honeybadger.contrib.django.honeybadger')
     def test_process_exception(self, mock_hb):
         request = self.rf.get('test')
         request.resolver_match = self.url.resolve('test')
-        self.middleware.process_request(request)
         exc = ValueError('test exception')
-        self.middleware.process_exception(request, exc)
+
+        middleware = DjangoHoneybadgerMiddleware(self.get_response)
+        middleware.process_exception(request, exc)
 
         mock_hb.notify.assert_called_with(exc)
         self.assertIsNone(current_request(), msg='Current request should be cleared after exception handling')
 
-    def test_process_response(self):
+    def test___call__(self):
         request = self.rf.get('test')
         request.resolver_match = self.url.resolve('test')
-        response = Mock()
-        honeybadger.set_context(foo='bar')
-        self.middleware.process_request(request)
 
-        self.middleware.process_response(request, response)
+        middleware = DjangoHoneybadgerMiddleware(self.get_response)
+        response = middleware(request)
+
         self.assertDictEqual({}, honeybadger._get_context(), msg='Context should be cleared after response handling')
         self.assertIsNone(current_request(), msg='Current request should be cleared after response handling')
 
@@ -125,11 +136,13 @@ class DjangoMiddlewareIntegrationTestCase(SimpleTestCase):
     def setUp(self):
         self.client = Client()
 
+    @unittest.skipUnless(versions_match(), "Current Python version unsupported by current version of Django")
     def test_context_cleared_after_response(self):
         self.assertIsNone(current_request(), msg='Current request should be empty prior to request')
         response = self.client.get('/plain_view')
         self.assertIsNone(current_request(), msg='Current request should be cleared after request processed')
 
+    @unittest.skipUnless(versions_match(), "Current Python version unsupported by current version of Django")
     @override_settings(
         HONEYBADGER={
             'API_KEY': 'abc123'

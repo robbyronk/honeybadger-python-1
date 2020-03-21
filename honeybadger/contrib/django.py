@@ -8,15 +8,6 @@ from honeybadger.plugins import Plugin, default_plugin_manager
 from honeybadger.utils import filter_dict
 
 try:
-    # Support for Django 1.10...
-    from django.utils.deprecation import MiddlewareMixin
-except ImportError:
-    # ...while maintaining support for Django <= 1.9.
-    class MiddlewareMixin(object):
-        def __init__(self, get_response=None):
-            pass
-
-try:
     from threading import local
 except ImportError:
     from django.utils._threading_local import local
@@ -95,9 +86,9 @@ class DjangoPlugin(Plugin):
         return payload
 
 
-class DjangoHoneybadgerMiddleware(MiddlewareMixin):
+class DjangoHoneybadgerMiddleware(object):
     def __init__(self, get_response=None):
-        super(DjangoHoneybadgerMiddleware, self).__init__(get_response=get_response)
+        self.get_response = get_response
         from django.conf import settings
         if getattr(settings, 'DEBUG'):
             honeybadger.configure(environment='development')
@@ -106,17 +97,18 @@ class DjangoHoneybadgerMiddleware(MiddlewareMixin):
         honeybadger.config.set_12factor_config()  # environment should override Django settings
         default_plugin_manager.register(DjangoPlugin())
 
-    def process_request(self, request):
+    def __call__(self, request):
         set_request(request)
         honeybadger.begin_request(request)
-        return None
+
+        response = self.get_response(request)
+
+        honeybadger.reset_context()
+        clear_request()
+
+        return response
 
     def process_exception(self, request, exception):
         honeybadger.notify(exception)
         clear_request()
         return None
-
-    def process_response(self, request, response):
-        honeybadger.reset_context()
-        clear_request()
-        return response

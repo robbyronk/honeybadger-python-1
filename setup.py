@@ -4,12 +4,25 @@ import os
 from codecs import open
 from setuptools import setup
 
-tests_require = ['nose', 'mock', 'testfixtures', 'blinker', 'Flask>=1.0']
+# Django 2.2 requires at least Python 3.5
+PY32     = sys.version_info == (3, 2) 
+LT_PY35  = sys.version_info < (3, 5)
+GTE_PY35 = sys.version_info >= (3, 5)
+GTE_PY36 = sys.version_info >= (3, 6)
 
-if sys.version_info[0:2] <= (3, 4):
-    tests_require.append('Django>=1.11,<1.12')
-else:
-    tests_require.append('Django>=2.1,<3.0')
+tests_require = ['nose', 'mock', 'testfixtures', 'Flask>=0.8', 'blinker']
+
+if LT_PY35:
+    tests_require.append('django==1.11')
+elif GTE_PY35:
+    tests_require.append('django>=2.2')
+elif GTE_PY36:
+    tests_require.append('django>=3.0')
+
+# Ugly fix for testfixtures on Python 3.2
+if PY32:
+    tests_require.remove('testfixtures')
+    tests_require.append('testfixtures==5.3.1')
 
 
 def get_version():
