@@ -33,26 +33,25 @@ def error_payload(exception, exc_traceback, config):
     else:
         tb = [f for f in traceback.extract_stack() if is_not_honeybadger_frame(f)]
 
-    source_radius = 3 # configurable later...
-
     logger.debug(tb)
 
     payload = {
         'class': type(exception) is dict and exception['error_class'] or exception.__class__.__name__,
         'message': type(exception) is dict and exception['error_message'] or str(exception),
-        'backtrace': [dict(number=f[1], file=_filename(f[0]), method=f[2]) for f in reversed(tb)],
-        'source': {}
+        'backtrace': [dict(number=f[1], file=_filename(f[0]), method=f[2], source=read_source(f)) for f in reversed(tb)]
     }
-
-    if len(tb) > 0 and os.path.isfile(tb[-1][0]):
-        with open(tb[-1][0], 'rt', encoding='utf-8') as f:
-            contents = f.readlines()
-
-        index = min(max(tb[-1][1], source_radius), len(contents) - source_radius)
-        payload['source'] = dict(zip(range(index-source_radius+1, index+source_radius+2), contents[index-source_radius:index+source_radius+1]))
 
     return payload
 
+def read_source(frame, source_radius=3):
+    if os.path.isfile(frame[0]):
+        with open(frame[0], 'rt', encoding='utf-8') as f:
+            contents = f.readlines()
+
+        index = min(max(frame[1], source_radius), len(contents) - source_radius)
+        return dict(zip(range(index-source_radius+1, index+source_radius+2), contents[index-source_radius:index+source_radius+1]))
+
+    return {}
 
 def server_payload(config):
     payload = {
