@@ -41,7 +41,7 @@ def test_error_payload_source_line_top_of_file():
         payload = error_payload(dict(error_class='Exception', error_message='Test'), None, config)
         expected = dict(zip(range(1, 8), ["Line {}\n".format(x) for x in range(1, 8)]))
         eq_(traceback_mock.call_count, 1)
-        eq_(payload['source'], expected)
+        eq_(payload['backtrace'][0]['source'], expected)
 
 def test_error_payload_source_line_bottom_of_file():
     with mock_traceback(line_no=10) as traceback_mock:
@@ -49,7 +49,7 @@ def test_error_payload_source_line_bottom_of_file():
         payload = error_payload(dict(error_class='Exception', error_message='Test'), None, config)
         expected = dict(zip(range(5, 11), ["Line {}\n".format(x) for x in range(5, 11)]))
         eq_(traceback_mock.call_count, 1)
-        eq_(payload['source'], expected)
+        eq_(payload['backtrace'][0]['source'], expected)
 
 def test_error_payload_source_line_midfile():
     with mock_traceback(line_no=5) as traceback_mock:
@@ -57,7 +57,7 @@ def test_error_payload_source_line_midfile():
         payload = error_payload(dict(error_class='Exception', error_message='Test'), None, config)
         expected = dict(zip(range(3, 10), ["Line {}\n".format(x) for x in range(3, 10)]))
         eq_(traceback_mock.call_count, 1)
-        eq_(payload['source'], expected)
+        eq_(payload['backtrace'][0]['source'], expected)
 
 
 @patch('os.path.isfile', return_value=False)
@@ -66,7 +66,7 @@ def test_error_payload_source_missing_file(_isfile):
         config = Configuration()
         payload = error_payload(
             dict(error_class='Exception', error_message='Test'), None, config)
-        eq_(payload['source'], {})
+        eq_(payload['backtrace'][0]['source'], {})
 
 
 def test_server_payload():
