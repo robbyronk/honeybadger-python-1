@@ -4,6 +4,8 @@ CHANGELOG](http://keepachangelog.com/) for how to update this file. This project
 adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Added
+- Add source snippets to backtrace lines (#50)
 
 ## [0.2.1] - 2020-01-13
 - Fix context for threads (#41, @dstuebe)
