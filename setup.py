@@ -6,14 +6,12 @@ from setuptools import setup
 
 tests_require = ['nose', 'mock', 'testfixtures', 'blinker']
 
-if sys.version_info[0:2] == (2, 7) or sys.version_info[0:2] >= (3, 5):
+if sys.version_info[0:2] >= (3, 5):
     tests_require.append('Flask>=1.0')
     # For some reason, Flask 1.1.1 is pulling in Jinja2 3.0.0 which causes syntax errors.
     tests_require.append('Jinja2<3.0.0')
 
-if sys.version_info[0:2] == (2, 7):
-    tests_require.append('Django==1.11')
-elif sys.version_info[0:2] <= (3, 5):
+if sys.version_info[0:2] <= (3, 5):
     tests_require.append('Django>=1.11,<=2.2')
 else:
     tests_require.append('Django>3.0,<4.0')
@@ -42,7 +40,6 @@ setup(
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
-        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',

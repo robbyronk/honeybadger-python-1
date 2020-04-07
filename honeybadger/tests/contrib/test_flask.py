@@ -13,14 +13,14 @@ class FlaskPluginTestCase(unittest.TestCase):
     def setUp(self):
         import flask
 
-        if flask.__version__.startswith('0.12') and PYTHON_VERSION != (2, 6) and PYTHON_VERSION != (2, 7) and PYTHON_VERSION < (3, 3):
-            self.skipTest('Flask 0.12 requires Python 2.6, 2.7 or Python3 > 3.2')
+        if flask.__version__.startswith('0.12') and PYTHON_VERSION < (3, 3):
+            self.skipTest('Flask 0.12 requires Python > 3.2')
         
-        if flask.__version__.startswith('1.0') and PYTHON_VERSION != (2, 7) and PYTHON_VERSION < (3, 4):
-            self.skipTest('Flask 1.0 requires Python 2.7 or Python3 > 3.3')
+        if flask.__version__.startswith('1.0') and PYTHON_VERSION < (3, 4):
+            self.skipTest('Flask 1.0 requires Python > 3.3')
 
-        if flask.__version__.startswith('1.1') and PYTHON_VERSION != (2, 7) and PYTHON_VERSION < (3, 5):
-            self.skipTest('Flask 1.1 requires Python 2.7 or Python3 > 3.4')
+        if flask.__version__.startswith('1.1') and PYTHON_VERSION < (3, 5):
+            self.skipTest('Flask 1.1 requires Python > 3.4')
 
         self.config = Configuration()
 
@@ -125,14 +125,14 @@ class FlaskHoneybadgerTestCase(unittest.TestCase):
     def setUp(self):
         import flask
 
-        if flask.__version__.startswith('0.12') and PYTHON_VERSION != (2, 6) and PYTHON_VERSION != (2, 7) and PYTHON_VERSION < (3, 3):
-            self.skipTest('Flask 0.12 requires Python 2.6, 2.7 or Python3 > 3.2')
+        if flask.__version__.startswith('0.12') and PYTHON_VERSION < (3, 3):
+            self.skipTest('Flask 0.12 requires Python > 3.2')
         
-        if flask.__version__.startswith('1.0') and PYTHON_VERSION != (2, 7) and PYTHON_VERSION < (3, 4):
-            self.skipTest('Flask 1.0 requires Python 2.7 or Python3 >= 3.4')
+        if flask.__version__.startswith('1.0') and PYTHON_VERSION < (3, 4):
+            self.skipTest('Flask 1.0 requires Python >= 3.4')
 
-        if flask.__version__.startswith('1.1') and PYTHON_VERSION != (2, 7) and PYTHON_VERSION < (3, 5):
-            self.skipTest('Flask 1.1 requires Python 2.7 or Python3 >= 3.5')
+        if flask.__version__.startswith('1.1') and PYTHON_VERSION < (3, 5):
+            self.skipTest('Flask 1.1 requires Python >= 3.5')
 
         import werkzeug
 

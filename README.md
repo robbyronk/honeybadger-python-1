@@ -5,7 +5,7 @@ When any uncaught exceptions occur, Honeybadger will send the data off to the Ho
 
 ## Supported Versions
 
-Tested with Django 1.9 and 1.10 and Python 2.7 through 3.5. Django integration is done via middleware and will work out of the box up to version 1.10.
+Tested with Python 3.5 - 3.8 against Django latest and LTS releases (1.11.29, 2.2.11, 3.0.4) as well as Flask 1.0 and 1.0.
 
 ## Getting Started
 
@@ -23,15 +23,13 @@ the `force_report_data` setting.
 
 ### Django
 
-*NOTE: Middleware configuration has changed in Django 1.10. Instead of using `MIDDLEWARE_CLASSES`, simply use the `MIDDLEWARE` configuration instead.*
-
-In a Django application, add the Honeybadger Django middleware to *the top* of your `MIDDLEWARE_CLASSES` config variable:
+In a Django application, add the Honeybadger Django middleware to *the top* of your `MIDDLEWARE` config variable:
 
 ```python
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = [
   'honeybadger.middleware.DjangoHoneybadgerMiddleware',
   ...
-)
+]
 ```
 
 It's important that the Honeybadger middleware is at the top, so that it wraps the entire request process, including all other middlewares.
