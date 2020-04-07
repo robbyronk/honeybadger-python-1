@@ -33,7 +33,7 @@ def versions_match():
     import django
 
     VERSION_MATRIX = {
-        '1.11': sys.version_info >= (2, 7),
+        '1.11': sys.version_info >= (3, 5),
         '2.2':  sys.version_info >= (3, 5),
         '3.0':  sys.version_info >= (3, 6),
         '3.1':  sys.version_info >= (3, 6)
