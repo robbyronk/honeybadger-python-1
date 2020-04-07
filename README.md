@@ -1,5 +1,5 @@
 # Honeybadger for Python
-[![Build Status](https://travis-ci.org/honeybadger-io/honeybadger-python.svg?branch=master)](https://travis-ci.org/honeybadger-io/honeybadger-python)
+![Test](https://github.com/honeybadger-io/honeybadger-python/workflows/Test/badge.svg)
 
 When any uncaught exceptions occur, Honeybadger will send the data off to the Honeybadger server specified in your environment.
 
