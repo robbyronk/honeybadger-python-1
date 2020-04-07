@@ -154,7 +154,7 @@ class DjangoMiddlewareIntegrationTestCase(SimpleTestCase):
     )
     def test_exceptions_handled_by_middleware(self):
         def assert_payload(req):
-            error_payload = json.loads(req.data)
+            error_payload = json.loads(str(req.data, "utf-8"))
 
             self.assertEqual(req.get_header('X-api-key'), 'abc123')
             self.assertEqual(req.get_full_url(), '{}/v1/notices/'.format(honeybadger.config.endpoint))
