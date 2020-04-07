@@ -15,6 +15,6 @@ def mock_urlopen(func, status=201):
 
     with patch('six.moves.urllib.request.urlopen', side_effect=mock_was_called) as request_mock:
         yield request_mock
-        mock_called_event.wait()
+        mock_called_event.wait(0.5)
         ((request_object,), mock_kwargs) = request_mock.call_args
         func(request_object)
