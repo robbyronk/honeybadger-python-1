@@ -43,12 +43,12 @@ def error_payload(exception, exc_traceback, config):
 
     return payload
 
-def read_source(line, source_radius=3):
-    if os.path.isfile(line[0]):
-        with open(line[0], 'rt', encoding='utf-8') as f:
+def read_source(frame, source_radius=3):
+    if os.path.isfile(frame[0]):
+        with open(frame[0], 'rt', encoding='utf-8') as f:
             contents = f.readlines()
 
-        index = min(max(line[1], source_radius), len(contents) - source_radius)
+        index = min(max(frame[1], source_radius), len(contents) - source_radius)
         return dict(zip(range(index-source_radius+1, index+source_radius+2), contents[index-source_radius:index+source_radius+1]))
 
     return {}
