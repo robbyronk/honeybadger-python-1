@@ -39,7 +39,7 @@ def test_error_payload_source_line_top_of_file():
     with mock_traceback(line_no=1) as traceback_mock:
         config = Configuration()
         payload = error_payload(dict(error_class='Exception', error_message='Test'), None, config)
-        expected = dict(zip(range(1, 8), ["Line {}\n".format(x) for x in range(1, 8)]))
+        expected = dict(zip(range(1, 5), ["Line {}\n".format(x) for x in range(1, 5)]))
         eq_(traceback_mock.call_count, 1)
         eq_(payload['backtrace'][0]['source'], expected)
 
@@ -47,7 +47,7 @@ def test_error_payload_source_line_bottom_of_file():
     with mock_traceback(line_no=10) as traceback_mock:
         config = Configuration()
         payload = error_payload(dict(error_class='Exception', error_message='Test'), None, config)
-        expected = dict(zip(range(5, 11), ["Line {}\n".format(x) for x in range(5, 11)]))
+        expected = dict(zip(range(7, 11), ["Line {}\n".format(x) for x in range(7, 11)]))
         eq_(traceback_mock.call_count, 1)
         eq_(payload['backtrace'][0]['source'], expected)
 
@@ -55,7 +55,7 @@ def test_error_payload_source_line_midfile():
     with mock_traceback(line_no=5) as traceback_mock:
         config = Configuration()
         payload = error_payload(dict(error_class='Exception', error_message='Test'), None, config)
-        expected = dict(zip(range(3, 10), ["Line {}\n".format(x) for x in range(3, 10)]))
+        expected = dict(zip(range(2, 9), ["Line {}\n".format(x) for x in range(2, 9)]))
         eq_(traceback_mock.call_count, 1)
         eq_(payload['backtrace'][0]['source'], expected)
 
