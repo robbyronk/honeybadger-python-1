@@ -64,7 +64,7 @@ def server_payload(config):
     }
 
     s = psutil.virtual_memory()
-    loadavg = os.getloadavg()
+    loadavg = psutil.getloadavg()
 
     free = float(s.free) / 1048576.0
     buffers = hasattr(s, 'buffers') and float(s.buffers) / 1048576.0 or 0.0
