@@ -48,8 +48,10 @@ def read_source(frame, source_radius=3):
         with open(frame[0], 'rt', encoding='utf-8') as f:
             contents = f.readlines()
 
-        index = min(max(frame[1], source_radius), len(contents) - source_radius)
-        return dict(zip(range(index-source_radius+1, index+source_radius+2), contents[index-source_radius:index+source_radius+1]))
+        start = max(1, frame[1] - source_radius)
+        end = min(len(contents), frame[1] + source_radius)
+
+        return dict(zip(range(start, end+1), contents[start-1:end]))
 
     return {}
 
