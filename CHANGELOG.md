@@ -7,6 +7,11 @@ adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Add source snippets to backtrace lines (#50)
 
+### Fixed
+- Fix "AttributeError: module 'os' has no attribute 'getloadavg'" error on
+  Windows (#53)
+- Fix snippet offset bug (#54)
+
 ## [0.2.1] - 2020-01-13
 - Fix context for threads (#41, @dstuebe)
 
@@ -19,7 +24,7 @@ adheres to [Semantic Versioning](http://semver.org/).
 
 ## [0.1.2] - 2018-01-16
 ### Fixed
-- Fixed issue with exception reporting failing when stacktrace includes a non-file source path (eg. Cython extension) 
+- Fixed issue with exception reporting failing when stacktrace includes a non-file source path (eg. Cython extension)
 
 ## [0.1.1] - 2017-12-08
 ### Changed
@@ -27,7 +32,7 @@ adheres to [Semantic Versioning](http://semver.org/).
 
 ## [0.1.0] - 2017-11-03
 ### Added
-- Block calls to honeybadger server when development like environment unless 
+- Block calls to honeybadger server when development like environment unless
   explicitly forced.
 
 ### Changed
