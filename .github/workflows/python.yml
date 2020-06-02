@@ -34,7 +34,7 @@ jobs:
       run: |
         export ${{ matrix.env }}
         python -m pip install --upgrade pip
-        pip install psutil six mock
+        pip install psutil six mock itsdangerous
         ./scripts/install_frameworks.sh
         python setup.py develop
     - name: Run Tests
