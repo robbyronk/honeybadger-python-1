@@ -5,6 +5,10 @@ adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [0.3.1] - 2020-09-01
+### Fixed
+- Release for Python 3.8
+
 ## [0.3.0] - 2020-06-02
 ### Added
 - Add source snippets to backtrace lines (#50)
