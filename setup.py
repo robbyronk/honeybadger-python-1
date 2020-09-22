@@ -4,7 +4,7 @@ import os
 from codecs import open
 from setuptools import setup
 
-tests_require = ['nose', 'mock', 'testfixtures', 'blinker']
+tests_require = ['wheel', 'nose', 'mock', 'testfixtures', 'blinker']
 
 if sys.version_info[0:2] >= (3, 5):
     tests_require.append('Flask>=1.0')
