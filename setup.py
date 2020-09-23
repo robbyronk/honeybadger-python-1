@@ -4,20 +4,18 @@ import os
 from codecs import open
 from setuptools import setup
 
-tests_require = ['wheel', 'nose', 'mock', 'testfixtures', 'blinker']
+tests_require = ['nose', 'mock', 'testfixtures', 'blinker']
 
 if sys.version_info[0:2] >= (3, 5):
-    if os.environ.get('FLASK_VERSION', None):
-        tests_require.append('Flask>=1.0')
-        # For some reason, Flask 1.1.1 is pulling in Jinja2 3.0.0 which causes syntax errors.
-        tests_require.append('Jinja2<3.0.0')
-        tests_require.append('MarkupSafe<2.0.0')
+    tests_require.append('Flask>=1.0')
+    # For some reason, Flask 1.1.1 is pulling in Jinja2 3.0.0 which causes syntax errors.
+    tests_require.append('Jinja2<3.0.0')
+    tests_require.append('MarkupSafe<2.0.0')
 
-if os.environ.get('DJANGO_VERSION', None):
-    if sys.version_info[0:2] <= (3, 5):
-        tests_require.append('Django>=1.11,<=2.2')
-    else:
-        tests_require.append('Django>3.0,<4.0')
+if sys.version_info[0:2] <= (3, 5):
+    tests_require.append('Django>=1.11,<=2.2')
+else:
+    tests_require.append('Django>3.0,<4.0')
 
 # Ugly fix for testfixtures on Python 3.2
 if sys.version_info[0:2] == (3, 2):
