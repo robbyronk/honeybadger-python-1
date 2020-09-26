@@ -10,7 +10,14 @@ class StringReprJSONEncoder(json.JSONEncoder):
 
 def filter_dict(data, filter_keys):
     # filter_keys = set(data.keys())
-    for key in filter_keys:
-        if key in data:
-            data[key] = "[FILTERED]"
+    if type(data) != dict:
+      return data
+
+    for key, value in data.items():
+      if key in filter_keys:
+        data[key] = "[FILTERED]"
+
+      if type(value) == dict:
+        data[key] = filter_dict(data[key], filter_keys)
+
     return data
