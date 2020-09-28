@@ -5,6 +5,10 @@ adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [0.4.0] - 2020-09-28
+### Added
+- Add support for filtering nested params (#58)
+
 ## [0.3.1] - 2020-09-01
 ### Fixed
 - Release for Python 3.8
