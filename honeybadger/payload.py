@@ -7,8 +7,6 @@ from six.moves import zip
 from io import open
 from datetime import datetime
 
-import psutil
-
 from .version import __version__
 from .plugins import default_plugin_manager
 
@@ -56,36 +54,41 @@ def read_source(frame, source_radius=3):
     return {}
 
 def server_payload(config):
-    payload = {
+    return {
         'project_root': config.project_root,
         'environment_name': config.environment,
         'hostname': config.hostname,
         'time': datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
         'pid': os.getpid(),
-        'stats': {}
+        'stats': stats_payload()
     }
 
-    s = psutil.virtual_memory()
-    loadavg = psutil.getloadavg()
+def stats_payload():
+    try:
+        import psutil
+    except ImportError:
+        return {}
+    else:
+        s = psutil.virtual_memory()
+        loadavg = psutil.getloadavg()
 
-    free = float(s.free) / 1048576.0
-    buffers = hasattr(s, 'buffers') and float(s.buffers) / 1048576.0 or 0.0
-    cached = hasattr(s, 'cached') and float(s.cached) / 1048576.0 or 0.0
-    total_free = free + buffers + cached
+        free = float(s.free) / 1048576.0
+        buffers = hasattr(s, 'buffers') and float(s.buffers) / 1048576.0 or 0.0
+        cached = hasattr(s, 'cached') and float(s.cached) / 1048576.0 or 0.0
+        total_free = free + buffers + cached
+        payload = {}
 
+        payload['mem'] = {
+            'total': float(s.total) / 1048576.0, # bytes -> megabytes
+            'free': free,
+            'buffers': buffers,
+            'cached': cached,
+            'total_free': total_free
+        }
 
-    payload['stats']['mem'] = {
-        'total': float(s.total) / 1048576.0, # bytes -> megabytes
-        'free': free,
-        'buffers': buffers,
-        'cached': cached,
-        'total_free': total_free
-    }
+        payload['load'] = dict(zip(('one', 'five', 'fifteen'), loadavg))
 
-    payload['stats']['load'] = dict(zip(('one', 'five', 'fifteen'), loadavg))
-
-    return payload
-
+        return payload
 
 def create_payload(exception, exc_traceback=None, config=None, context={}):
     if exc_traceback is None:
