@@ -4,6 +4,9 @@ CHANGELOG](http://keepachangelog.com/) for how to update this file. This project
 adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+## [0.4.1] - 2021-01-19
+### Fixed
+- Make psutil optional for use in serverless environments (#63, @kstevens715)
 
 ## [0.4.0] - 2020-09-28
 ### Added
