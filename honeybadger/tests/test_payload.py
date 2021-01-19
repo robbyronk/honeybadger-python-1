@@ -2,6 +2,7 @@ from six.moves import range
 from six.moves import zip
 from contextlib import contextmanager
 import os
+import sys
 
 from honeybadger.payload import error_payload
 from honeybadger.payload import server_payload
@@ -79,3 +80,10 @@ def test_server_payload():
     eq_(payload['pid'], os.getpid())
     assert type(payload['stats']['mem']['total']) == float
     assert type(payload['stats']['mem']['free']) == float
+
+def test_psutil_is_optional():
+    config = Configuration()
+
+    with patch.dict(sys.modules, {'psutil':None}):
+        payload = server_payload(config)
+        eq_(payload['stats'], {})
