@@ -74,12 +74,15 @@ class DjangoPlugin(Plugin):
             'action': request.resolver_match.func.__name__,
             'params': {},
             'session': {},
-            'cgi_data': dict(request.META),
+            'cgi_data': filter_dict(request.META, config.params_filters),
             'context': context
         }
 
         if hasattr(request, 'session'):
             payload['session'] = filter_dict(dict(request.session), config.params_filters)
+
+        if hasattr(request, 'COOKIES'):
+            payload['cgi_data']['HTTP_COOKIE'] = filter_dict(request.COOKIES, config.params_filters)
 
         if request.method == 'GET':
             payload['params'] = filter_dict(dict(request.GET), config.params_filters)
