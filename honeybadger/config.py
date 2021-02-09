@@ -14,6 +14,7 @@ class Configuration(object):
         ('endpoint', str),
         ('params_filters', list),
         ('force_report_data', bool),
+        ('force_sync', bool)
     )
 
     def __init__(self, *args, **kwargs):
@@ -24,6 +25,7 @@ class Configuration(object):
         self.endpoint = 'https://api.honeybadger.io'
         self.params_filters = ['password', 'password_confirmation', 'credit_card']
         self.force_report_data = False
+        self.force_sync = self.is_aws_lambda_environment or False
 
         self.set_12factor_config()
         self.set_config_from_dict(kwargs)
@@ -59,3 +61,13 @@ class Configuration(object):
         :rtype: bool
         """
         return self.environment in self.DEVELOPMENT_ENVIRONMENTS
+
+    @property
+    def is_aws_lambda_environment(self):
+        """
+        Checks if you are in an aws lambda environment by checking for the existence
+        of "AWS_EXECUTION_ENV" in the environment variables.
+
+        :rtype: bool
+        """
+        return os.environ.get("AWS_EXECUTION_ENV") is not  None

@@ -54,7 +54,7 @@ def read_source(frame, source_radius=3):
     return {}
 
 def server_payload(config):
-    return {
+    payload =  {
         'project_root': config.project_root,
         'environment_name': config.environment,
         'hostname': config.hostname,
@@ -62,6 +62,20 @@ def server_payload(config):
         'pid': os.getpid(),
         'stats': stats_payload()
     }
+    if config.is_aws_lambda_environment:
+        AWS_ENV_MAP = [
+            "AWS_REGION",
+            "AWS_EXECUTION_ENV",
+            "AWS_LAMBDA_FUNCTION_NAME",
+            "AWS_LAMBDA_LOG_GROUP_NAME",
+            "AWS_LAMBDA_LOG_STREAM_NAME",
+            "AWS_LAMBDA_FUNCTION_VERSION",
+            "AWS_LAMBDA_FUNCTION_MEMORY_SIZE",
+            ]
+        for key in AWS_ENV_MAP:
+            payload[key] = os.environ.get(key, None)
+            
+    return payload
 
 def stats_payload():
     try:
