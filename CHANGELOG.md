@@ -8,7 +8,7 @@ adheres to [Semantic Versioning](http://semver.org/).
 - Add `CSRF_COOKIE` to default filter_params (#44)
 - Add `HTTP_COOKIE` to payload for flask & django (#44)
 - Filter meta (cgi_data) attributes for flask & django (#43)
-- Add `FORCE_SYNC` config option (#60)
+- Add `force_sync` config option (#60)
 - Add additional server payload for AWS lambda environment (#60)
 
 ## [0.4.2] - 2021-02-04
