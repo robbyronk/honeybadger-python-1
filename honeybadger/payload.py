@@ -123,9 +123,9 @@ def create_payload(exception, exc_traceback=None, config=None, context={}):
 
         lambda_details = {key:os.environ.get(key, None) for key in AWS_ENV_MAP}
         payload['details']['Lambda Details'] = lambda_details
-        # payload['request']['component'] = lambda_details['AWS_LAMBDA_FUNCTION_NAME']
-        # payload['request']['action'] = lambda_details['_HANDLER']
-        # payload['request']['context']['lambda_trace_id'] = os.environ.get('_X_AMZN_TRACE_ID', None)
+        payload['request']['component'] = lambda_details['AWS_LAMBDA_FUNCTION_NAME']
+        payload['request']['action'] = lambda_details['_HANDLER']
+        payload['request']['context']['lambda_trace_id'] = os.environ.get('_X_AMZN_TRACE_ID', None)
 
 
     return payload
