@@ -65,9 +65,9 @@ class Configuration(object):
     @property
     def is_aws_lambda_environment(self):
         """
-        Checks if you are in an aws lambda environment by checking for the existence
-        of "AWS_EXECUTION_ENV" in the environment variables.
+        Checks if you are in an AWS Lambda environment by checking for the existence
+        of "AWS_LAMBDA_FUNCTION_NAME" in the environment variables.
 
         :rtype: bool
         """
-        return os.environ.get("AWS_EXECUTION_ENV") is not  None
+        return os.environ.get("AWS_LAMBDA_FUNCTION_NAME") is not  None

@@ -54,7 +54,7 @@ def read_source(frame, source_radius=3):
     return {}
 
 def server_payload(config):
-    payload =  {
+    return {
         'project_root': config.project_root,
         'environment_name': config.environment,
         'hostname': config.hostname,
@@ -62,20 +62,7 @@ def server_payload(config):
         'pid': os.getpid(),
         'stats': stats_payload()
     }
-    if config.is_aws_lambda_environment:
-        AWS_ENV_MAP = [
-            "AWS_REGION",
-            "AWS_EXECUTION_ENV",
-            "AWS_LAMBDA_FUNCTION_NAME",
-            "AWS_LAMBDA_LOG_GROUP_NAME",
-            "AWS_LAMBDA_LOG_STREAM_NAME",
-            "AWS_LAMBDA_FUNCTION_VERSION",
-            "AWS_LAMBDA_FUNCTION_MEMORY_SIZE",
-            ]
-        for key in AWS_ENV_MAP:
-            payload[key] = os.environ.get(key, None)
-            
-    return payload
+    
 
 def stats_payload():
     try:
@@ -108,9 +95,9 @@ def create_payload(exception, exc_traceback=None, config=None, context={}):
     if exc_traceback is None:
         exc_traceback = sys.exc_info()[2]
 
-    payload = default_plugin_manager.generate_payload(config, context)
+    request_payload = default_plugin_manager.generate_payload(config, context)
 
-    return {
+    payload =  {
         'notifier': {
             'name': "Honeybadger for Python",
             'url': "https://github.com/honeybadger-io/honeybadger-python",
@@ -118,5 +105,27 @@ def create_payload(exception, exc_traceback=None, config=None, context={}):
         },
         'error':  error_payload(exception, exc_traceback, config),
         'server': server_payload(config),
-        'request': payload,
+        'request': request_payload,
+        'details': {}
     }
+
+    if config.is_aws_lambda_environment:
+        AWS_ENV_MAP = [
+            '_HANDLER',
+            'AWS_REGION',
+            'AWS_EXECUTION_ENV',
+            'AWS_LAMBDA_FUNCTION_NAME',
+            'AWS_LAMBDA_LOG_GROUP_NAME',
+            'AWS_LAMBDA_LOG_STREAM_NAME',
+            'AWS_LAMBDA_FUNCTION_VERSION',
+            'AWS_LAMBDA_FUNCTION_MEMORY_SIZE',
+            ]
+
+        lambda_details = {key:os.environ.get(key, None) for key in AWS_ENV_MAP}
+        payload['details']['Lambda Details'] = lambda_details
+        # payload['request']['component'] = lambda_details['AWS_LAMBDA_FUNCTION_NAME']
+        # payload['request']['action'] = lambda_details['_HANDLER']
+        # payload['request']['context']['lambda_trace_id'] = os.environ.get('_X_AMZN_TRACE_ID', None)
+
+
+    return payload
