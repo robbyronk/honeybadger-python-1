@@ -25,8 +25,8 @@ class Configuration(object):
         self.endpoint = 'https://api.honeybadger.io'
         self.params_filters = ['password', 'password_confirmation', 'credit_card', 'CSRF_COOKIE']
         self.force_report_data = False
-        self.force_sync = self.is_aws_lambda_environment or False
-
+        self.force_sync = self.is_aws_lambda_environment
+        
         self.set_12factor_config()
         self.set_config_from_dict(kwargs)
 

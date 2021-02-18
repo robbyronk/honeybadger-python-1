@@ -1,11 +1,9 @@
-import json
-import logging
-
 from honeybadger import honeybadger
+from honeybadger.contrib.aws_lambda import AWSLambdaPlugin
+from honeybadger.plugins import default_plugin_manager
 
-from utils import MockAwsLambdaManager
-
-honeybadger.configure(api_key='your api key')
+honeybadger.configure(api_key='014d2690')
+default_plugin_manager.register(AWSLambdaPlugin())
 
 
 def lambda_handler(event, context):
@@ -16,11 +14,3 @@ def lambda_handler(event, context):
     b = 0
 
     return (a/b)
-
-#Run this file on your terminal to test this lambda function
-if __name__ == '__main__':
-
-    with MockAwsLambdaManager() as manager:
-        event = {}
-        context = {}
-        lambda_handler(event, context) 
