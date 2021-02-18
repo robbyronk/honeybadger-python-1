@@ -28,6 +28,6 @@ use aws-cli update function code command to upload the binary .zip file to Lambd
 ```aws_lambda % aws lambda create-function\
     --function-name HoneyBadgerLambda \
     --zip-file fileb://test-honeybadger-lambda.zip\
-    --role arn:aws:iam::066954119569:role/admin-api-dev-us-east-1-lambdaRole\
+    --role *your role arn here*\
     --region us-east-1 --runtime python3.6 --handler handler.lambda_handler
     ```
