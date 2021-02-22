@@ -9,25 +9,22 @@ from threading import local
 _thread_locals = local()
 REQUEST_LOCAL_KEY = '__awslambda_current_request'
 
-def get_execution_params():
+def current_event():
     """
-    Return current execution event & context for this thread.
+    Return current execution event for this thread.
     """
     return getattr(_thread_locals, REQUEST_LOCAL_KEY, None)
 
-def set_execution_params(aws_event, aws_context):
+def set_event(aws_event):
     """
-    Set current execution event & context for this thread.
+    Set current execution event for this thread.
     """
-    request = {
-        'aws_event':aws_event,
-        'aws_context':aws_context
-    }
-    setattr(_thread_locals, REQUEST_LOCAL_KEY, request)
 
-def clear_execution_params():
+    setattr(_thread_locals, REQUEST_LOCAL_KEY, aws_event)
+
+def clear_event():
     """
-    Clears execution params for this thread.
+    Clears execution event for this thread.
     """
     if hasattr(_thread_locals, REQUEST_LOCAL_KEY):
         setattr(_thread_locals, REQUEST_LOCAL_KEY, None)
@@ -50,7 +47,7 @@ def get_lambda_bootstrap():
         return sys.modules["bootstrap"]
     elif "__main__" in sys.modules:
         if hasattr(sys.modules["__main__"], "bootstrap"):
-            return sys.modules["__main__"].bootstrap  # type: ignore
+            return sys.modules["__main__"].bootstrap
         return sys.modules["__main__"]
     else:
         return None
@@ -58,7 +55,7 @@ def get_lambda_bootstrap():
 def _wrap_lambda_handler(handler):
 
     def wrapped_handler(aws_event, aws_context, *args, **kwargs):
-        set_execution_params(aws_event, aws_context)
+        set_event(aws_event)
 
         honeybadger.begin_request(aws_event)
         try:
@@ -66,7 +63,7 @@ def _wrap_lambda_handler(handler):
         except Exception as e:
             honeybadger.notify(e)
             exc_info = sys.exc_info()
-            clear_execution_params()
+            clear_event()
             honeybadger.reset_context()
 
             #Rerase exception to proceed with normal aws error handling
@@ -88,23 +85,13 @@ class AWSLambdaPlugin(Plugin):
     def generate_payload(self, config, context):
         """
         Generate payload by checking the lambda's
-        request event & context.
+        request event
         """
-        request = get_execution_params()
-        event = request['aws_event']
-        context = request['aws_context']
-
         payload = {
-            "handler": context.function_name,
-            "version": context.function_version,
-            "memory": context.memory_limit_in_mb,
-            "request_id": context.aws_request_id, 
-            "log_group_name": context.log_group_name,
-            "log_stream_name": context.log_stream_name,
-            "event": filter_dict(event, config.params_filters),
+            "event": current_event(),
+            "context": {}
         }
-
-        return payload
+        return filter_dict(payload, config.params_filters)
         
     def initialize_request_handler(self, lambda_bootstrap):
         """
