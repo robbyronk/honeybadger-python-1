@@ -95,8 +95,6 @@ def create_payload(exception, exc_traceback=None, config=None, context={}):
     if exc_traceback is None:
         exc_traceback = sys.exc_info()[2]
 
-    request_payload = default_plugin_manager.generate_payload(config, context)
-
     payload =  {
         'notifier': {
             'name': "Honeybadger for Python",
@@ -105,32 +103,8 @@ def create_payload(exception, exc_traceback=None, config=None, context={}):
         },
         'error':  error_payload(exception, exc_traceback, config),
         'server': server_payload(config),
-        'request': request_payload,
-        'details': {}
+        'request': {'context':context}
     }
+
+    return default_plugin_manager.generate_payload(payload, config, context)
     
-    if config.is_aws_lambda_environment:
-
-        # Should this be in the lambda plugin instead?
-        # We can't manipulate the payload directly from the plugin
-        # So this makes sense for now
-        AWS_ENV_MAP = (
-            ("_HANDLER", "handler"),
-            ("AWS_REGION", "region"),
-            ("AWS_EXECUTION_ENV", "runtime"),
-            ("AWS_LAMBDA_FUNCTION_NAME", "function"),
-            ("AWS_LAMBDA_FUNCTION_MEMORY_SIZE", "memory"),
-            ("AWS_LAMBDA_FUNCTION_VERSION", "version"),
-            ("AWS_LAMBDA_LOG_GROUP_NAME", "log_group"),
-            ("AWS_LAMBDA_LOG_STREAM_NAME", "log_name")
-        )
-
-        lambda_details = {detail[1]: os.environ.get(detail[0], None) for detail in AWS_ENV_MAP}
-        payload["details"]["Lambda Details"] = lambda_details
-        payload["request"]["component"] = lambda_details["function"]
-        payload["request"]["action"] = lambda_details["handler"]
-        trace_id = os.environ.get("_X_AMZN_TRACE_ID", None)
-        if trace_id:
-            payload["request"]["context"]["lambda_trace_id"] = trace_id
-
-    return payload
