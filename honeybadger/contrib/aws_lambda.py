@@ -92,6 +92,7 @@ class AWSLambdaPlugin(Plugin):
             "params": {
                 "event": current_event()
             },
+            "context": context
         }
         default_payload["request"] = filter_dict(request_payload, config.params_filters)
 
