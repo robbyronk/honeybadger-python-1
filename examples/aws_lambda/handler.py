@@ -3,7 +3,6 @@ from honeybadger.contrib.aws_lambda import AWSLambdaPlugin
 from honeybadger.plugins import default_plugin_manager
 
 honeybadger.configure(api_key='your api key')
-default_plugin_manager.register(AWSLambdaPlugin())
 
 
 def lambda_handler(event, context):
