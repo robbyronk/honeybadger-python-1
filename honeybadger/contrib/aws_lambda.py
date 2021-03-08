@@ -1,3 +1,4 @@
+import os
 import sys
 
 from honeybadger import honeybadger
@@ -82,18 +83,40 @@ class AWSLambdaPlugin(Plugin):
     def supports(self, config, context):
         return config.is_aws_lambda_environment
 
-    def generate_payload(self, config, context):
+    def generate_payload(self, default_payload, config, context):
         """
         Generate payload by checking the lambda's
         request event
         """
-        payload = {
+        request_payload = {
             "params": {
                 "event": current_event()
             },
-            "context": {}
+            "context": context
         }
-        return filter_dict(payload, config.params_filters)
+        default_payload["request"] = filter_dict(request_payload, config.params_filters)
+
+        AWS_ENV_MAP = (
+            ("_HANDLER", "handler"),
+            ("AWS_REGION", "region"),
+            ("AWS_EXECUTION_ENV", "runtime"),
+            ("AWS_LAMBDA_FUNCTION_NAME", "function"),
+            ("AWS_LAMBDA_FUNCTION_MEMORY_SIZE", "memory"),
+            ("AWS_LAMBDA_FUNCTION_VERSION", "version"),
+            ("AWS_LAMBDA_LOG_GROUP_NAME", "log_group"),
+            ("AWS_LAMBDA_LOG_STREAM_NAME", "log_name")
+        )
+
+        lambda_details = {detail[1]: os.environ.get(detail[0], None) for detail in AWS_ENV_MAP}
+        default_payload["details"] = {}
+        default_payload["details"]["Lambda Details"] = lambda_details
+        default_payload["request"]["component"] = lambda_details["function"]
+        default_payload["request"]["action"] = lambda_details["handler"]
+        trace_id = os.environ.get("_X_AMZN_TRACE_ID", None)
+        if trace_id:
+            default_payload["request"]["context"]["lambda_trace_id"] = trace_id
+
+        return default_payload
         
     def initialize_request_handler(self, lambda_bootstrap):
         """

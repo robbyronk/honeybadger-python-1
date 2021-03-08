@@ -32,7 +32,7 @@ class FlaskPlugin(Plugin):
         else:
             return bool(request)
 
-    def generate_payload(self, config, context):
+    def generate_payload(self, default_payload, config, context):
         """
         Generate payload by checking Flask request object.
         :param context: current context.
@@ -70,7 +70,9 @@ class FlaskPlugin(Plugin):
 
         payload['params'] = params
 
-        return payload
+        default_payload['request'] = payload
+
+        return default_payload
 
 
 class FlaskHoneybadger(object):
