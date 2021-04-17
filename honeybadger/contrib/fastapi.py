@@ -1,6 +1,7 @@
 import logging
 
 from fastapi.routing import APIRoute
+from fastapi import exceptions
 from starlette.requests import Request
 from typing import Callable
 
@@ -14,6 +15,8 @@ class HoneybadgerRoute(APIRoute):
         async def custom_route_handler(request: Request):
             try:
                 return await original_route_handler(request)
+            except exceptions.HTTPException as exc:
+                raise exc from None
             except Exception as exc:
                 body = await request.body()
                 scope = dict(request)
