@@ -4,8 +4,8 @@ import pydantic
 
 honeybadger.configure(api_key='c10787cf')
 
-app = FastAPI(title="Honeybadger - FastAPI with Middleware.")
-app.add_middleware(contrib.ASGIHoneybadger, params_filters=["client"])
+app = FastAPI(title="Honeybadger - FastAPI with Custom Route.")
+app.router.route_class = contrib.HoneybadgerRoute
 
 @app.get("/raise_some_error", tags=["Notify"])
 def raise_some_error(a: str = "foo"):
@@ -26,7 +26,7 @@ def raise_status_code(status_code: int = 404, detail: str = "Forced 404."):
     """This exception is raised on purpose, so will not be notified."""
     raise HTTPException(status_code=404, detail=detail)
 
-some_router = APIRouter()
+some_router = APIRouter(route_class=contrib.HoneybadgerRoute)
 
 @some_router.get("/some_router/endpoint", tags=["Notify"])
 def some_router_endpoint():
