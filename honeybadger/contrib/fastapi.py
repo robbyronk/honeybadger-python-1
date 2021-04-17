@@ -1,11 +1,11 @@
 import logging
 
-from honeybadger import honeybadger
-from starlette.requests import Request
 from fastapi.routing import APIRoute
+from starlette.requests import Request
 from typing import Callable
-from . import asgi
 
+from honeybadger import honeybadger
+from honeybadger.contrib import asgi
 
 class HoneybadgerRoute(APIRoute):
     def get_route_handler(self) -> Callable:
@@ -15,10 +15,7 @@ class HoneybadgerRoute(APIRoute):
             try:
                 return await original_route_handler(request)
             except Exception as exc:
-                try:
-                    body = await request.json()
-                except:
-                    body = "error"
+                body = await request.body()
                 scope = dict(request)
                 scope["body"] = body
                 honeybadger.notify(exception=exc, context=asgi._as_context(scope))

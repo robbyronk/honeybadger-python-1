@@ -1,9 +1,19 @@
 from honeybadger import honeybadger, plugins, utils
 import urllib
+import inspect
+import asyncio
 
-def _looks_like_asgi3(app):
-    # TODO: implement this.
-    return True
+
+def _looks_like_asgi3(app) -> bool:
+    # https://github.com/encode/uvicorn/blob/bf1c64e2c141971c546671c7dc91b8ccf0afeb7d/uvicorn/config.py#L327
+    if inspect.isclass(app):
+        return hasattr(app, "__await__")
+    elif inspect.isfunction(app):
+        return asyncio.iscoroutinefunction(app)
+    else:
+        call = getattr(app, "__call__", None)
+        return asyncio.iscoroutinefunction(call) 
+    return False
 
 
 def _get_headers(scope: dict) -> dict:
@@ -38,7 +48,6 @@ def _get_url(scope: dict, default_scheme: str, host: str = None) -> str:
         return "%s://%s%s" % (scheme, host, path)
     return path
 
-
 def _as_context(scope: dict) -> dict:
     ctx = {}
     if scope.get("type") in ("http", "websocket"):
@@ -48,7 +57,7 @@ def _as_context(scope: dict) -> dict:
         ctx["url"] = _get_url(
             scope, "http" if scope["type"] == "http" else "ws", headers.get("host")
         )
-    ctx["client"] = scope.get("client")  # TODO: do we ALWAYS have to send this, or there are limitations?
+    ctx["client"] = scope.get("client")  # pii info can be filtered from hb config.
     # TODO: should we look at "endpoint"?
     return utils.filter_dict(ctx, honeybadger.config.params_filters)
 
@@ -91,9 +100,7 @@ class ASGIHoneybadger(plugins.Plugin):
             honeybadger.reset_context()
 
     def supports(self, config, context):
-        # TODO: implement this.
-        return True
+        return context.get("asgi") is not None
     
     def generate_payload(self, default_payload, config, context):
-        # TODO: Maybe filter away from context using config?
-        return default_payload
+        return utils.filter_dict(default_payload, honeybadger.config.params_filters)
