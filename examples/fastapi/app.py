@@ -2,7 +2,7 @@ from fastapi import FastAPI, HTTPException, APIRouter
 from honeybadger import honeybadger, contrib
 import pydantic
 
-honeybadger.configure(api_key='c10787cf')
+honeybadger.configure(api_key='<your-api-key>')
 
 app = FastAPI(title="Honeybadger - FastAPI with Middleware.")
 app.add_middleware(contrib.ASGIHoneybadger, params_filters=["client"])
