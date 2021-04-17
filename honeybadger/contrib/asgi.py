@@ -2,6 +2,7 @@ from honeybadger import honeybadger, plugins, utils
 import urllib
 import inspect
 import asyncio
+import json
 
 
 def _looks_like_asgi3(app) -> bool:
@@ -48,6 +49,16 @@ def _get_url(scope: dict, default_scheme: str, host: str = None) -> str:
         return "%s://%s%s" % (scheme, host, path)
     return path
 
+def _get_body(scope: dict) -> dict:
+    body = scope.get("body")
+    if body is None:
+        return body
+
+    try:
+        return json.loads(body)
+    except:
+        return urllib.parse.unquote(body.decode("latin-1"))
+
 def _as_context(scope: dict) -> dict:
     ctx = {}
     if scope.get("type") in ("http", "websocket"):
@@ -57,7 +68,12 @@ def _as_context(scope: dict) -> dict:
         ctx["url"] = _get_url(
             scope, "http" if scope["type"] == "http" else "ws", headers.get("host")
         )
+        body = _get_body(scope)
+        if body is not None:
+            ctx["body"] = body
+
     ctx["client"] = scope.get("client")  # pii info can be filtered from hb config.
+
     # TODO: should we look at "endpoint"?
     return utils.filter_dict(ctx, honeybadger.config.params_filters)
 
