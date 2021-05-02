@@ -71,8 +71,8 @@ class PluginManager(object):
                 logger.debug('Returning payload from plugin %s' % name)
                 
                 default_payload = plugin.generate_payload(default_payload, config, context)
-
-        logger.debug('No active plugin to generate payload')
+        else:
+            logger.debug('No active plugin to generate payload')
         
         return default_payload
 
