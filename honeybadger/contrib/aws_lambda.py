@@ -146,10 +146,12 @@ class AWSLambdaPlugin(Plugin):
             lambda_bootstrap.handle_event_request = event_handler
             lambda_bootstrap.handle_http_request = http_handler
 
-        #Third party lambda services (such as zappa) may override function execution
-        #Hence the original haldlers are not found.
+        # Future lambda runtime may change execution strategy
+        # Third party lambda services (such as zappa) may override function execution
+        # either of these will raise an Attribute error as "handle_event_request" or "handle_event_request"
+        # may not be found.
         except AttributeError as e:
-            logger.warning('Lambda function not wrapped by honeybadger')
+            logger.warning('Lambda function not wrapped by honeybadger: %s' %e)
         
         
         
