@@ -57,7 +57,7 @@ class PluginManager(object):
             logger.info('Registering plugin %s' % plugin.name)
             self._registered[plugin.name] = plugin
         else:
-            logger.warn('Plugin %s already registered' % plugin.name)
+            logger.warning('Plugin %s already registered' % plugin.name)
 
     def generate_payload(self, default_payload, config=None, context=None):
         """
