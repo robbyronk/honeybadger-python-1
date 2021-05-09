@@ -112,7 +112,6 @@ class ASGIHoneybadger(plugins.Plugin):
             honeybadger.notify(exception=exc, context=_as_context(scope))
             raise exc from None
         finally:
-            # TODO: do we really need some clean up? See how context is handled.
             honeybadger.reset_context()
 
     def supports(self, config, context):
