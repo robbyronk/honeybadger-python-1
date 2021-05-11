@@ -210,7 +210,7 @@ router = APIRouter(route_class=contrib.HoneybadgerRoute)
 
 ```
 
-### [Starlette](https://www.starlette.io/).
+### Starlette
 You can configure Honeybadger to work with Starlette just like in any other ASGI framework.
 
 ```python
