@@ -133,7 +133,7 @@ def lambda_handler(event, context):
 
 ### ASGI
 
-A generic ASGI middleware plugin is available for initializing and configuring Honeybadger: [`honeybadger.contrib.asgi`](./honeybadger/contrib/asgi.py).
+A generic [ASGI](https://asgi.readthedocs.io/en/latest/) middleware plugin is available for initializing and configuring Honeybadger: [`honeybadger.contrib.asgi`](./honeybadger/contrib/asgi.py).
 
 The general pattern for these cases is wrapping your ASGI application with a middleware:
 
