@@ -165,7 +165,7 @@ asgi_application = someASGIApplication()
 asgi_application = contrib.ASGIHoneybadger(asgi_application)
 ```
 
-### [FastAPI](https://fastapi.tiangolo.com/).
+### FastAPI
 
 [FastAPI](https://fastapi.tiangolo.com/) is based on Starlette, an ASGI application.
 You use Honeybadger's ASGI middleware on these types of applications.
