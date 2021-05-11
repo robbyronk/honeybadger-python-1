@@ -192,7 +192,7 @@ app.add_middleware(contrib.ASGIHoneybadger, params_filters=["dont-include-this"]
 
 #### FastAPI advanced usage.
 
-Consuming the request body in a ASGI application's middleware is [problematic and discouraged](https://github.com/encode/starlette/issues/495#issuecomment-494008175). This is the reason why request body data won't be sent to the web UI.
+Consuming the request body in an ASGI application's middleware is [problematic and discouraged](https://github.com/encode/starlette/issues/495#issuecomment-494008175). This is the reason why request body data won't be sent to the web UI.
 
 FastAPI allows overriding the logic used by the `Request` and `APIRoute` classes, by [using custom `APIRoute` classes](https://fastapi.tiangolo.com/advanced/custom-request-and-route/). This gives more control over the request body, and makes it possible to send request body data along with honeybadger notifications. 
 
