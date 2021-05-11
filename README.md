@@ -144,7 +144,7 @@ asgi_application = someASGIApplication()
 asgi_application = contrib.ASGIHoneybadger(asgi_application)
 ```
 
-You can pass configuration parameters (or *additional* configuration parameters) as keyworkd arguments at plugin's initialization:
+You can pass configuration parameters (or *additional* configuration parameters) as keyword arguments at plugin's initialization:
 
 ```python
 from honeybadger import contrib
