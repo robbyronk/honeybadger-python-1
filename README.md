@@ -131,7 +131,7 @@ def lambda_handler(event, context):
     return (a/b) #This will be reported
 ```
 
-### [ASGI](https://asgi.readthedocs.io/en/latest/).
+### ASGI
 
 A generic ASGI middleware plugin is available for initializing and configuring Honeybadger: [`honeybadger.contrib.asgi`](./honeybadger/contrib/asgi.py).
 
