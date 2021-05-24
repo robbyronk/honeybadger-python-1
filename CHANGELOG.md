@@ -4,6 +4,8 @@ CHANGELOG](http://keepachangelog.com/) for how to update this file. This project
 adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+## [0.6.0] - 2021-05-24
 ### Added
 - Add new ASGI middleware plugin (FastAPI, Starlette, Uvicorn). (#84)
 - Add FastAPI custom route. (#84)
