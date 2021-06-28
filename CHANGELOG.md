@@ -4,6 +4,8 @@ CHANGELOG](http://keepachangelog.com/) for how to update this file. This project
 adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Fixed
+- Allow 'None' as argument for context (#92)
 
 ## [0.6.0] - 2021-05-24
 ### Added
@@ -14,6 +16,7 @@ adheres to [Semantic Versioning](http://semver.org/).
 - Fix deprecated `logger.warn` call. (#84)
 
 ## [0.5.0] - 2021-03-17
+
 ### Added
 - Add `CSRF_COOKIE` to default filter_params (#44)
 - Add `HTTP_COOKIE` to payload for flask & django (#44)
