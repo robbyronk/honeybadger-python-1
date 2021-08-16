@@ -310,10 +310,9 @@ LOGGING = {
         },
     },
 }
-
 ```
 
-## <a name="config"></a>Configuration
+## Configuration
 
 To set configuration options, use the `honeybadger.configure` method, like so:
 
