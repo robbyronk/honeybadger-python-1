@@ -291,6 +291,7 @@ except:
 ```
 
 or using Dict Config:
+
 ```python
 LOGGING = {
     'version': 1,
