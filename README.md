@@ -65,9 +65,7 @@ order for the extension to work, you'll have to install the `blinker` library as
 keys with same name as the environment variables in [Configuration](#config) section. Note that if a value is also configured as an environment variable,
 then the environment variable's value will be used.
 
-Let's see it in action with an example:
-
-#### Example 1: Setup Honeybadger and automatically report exceptions
+#### Example
 
 ```python
 from flask import Flask, jsonify, request
