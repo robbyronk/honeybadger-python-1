@@ -67,7 +67,7 @@ then the environment variable's value will be used.
 
 Let's see it in action with an example:
 
-### Example 1: Setup Honeybadger and automatically report exceptions
+#### Example 1: Setup Honeybadger and automatically report exceptions
 
 ```python
 from flask import Flask, jsonify, request
