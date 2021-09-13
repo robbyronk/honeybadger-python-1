@@ -4,6 +4,8 @@ CHANGELOG](http://keepachangelog.com/) for how to update this file. This project
 adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+## [0.7.1] - 2021-09-13
 ### Fixed
 - Fixed post-python3.7 lambda bug: (#95, #97)
   > Lambda function not wrapped by honeybadger: module 'main' has no attribute 'handle_http_request'
