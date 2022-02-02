@@ -230,7 +230,7 @@ Django and Flask are the only explicitly supported frameworks at the moment. For
 from honeybadger import honeybadger
 honeybadger.configure(api_key='myapikey')
 
-raise Exception, "This will get reported!"
+raise Exception("This will get reported!")
 ```
 
 ### All set!
