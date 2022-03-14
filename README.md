@@ -5,7 +5,7 @@ When any uncaught exceptions occur, Honeybadger will send the data off to the Ho
 
 ## Supported Versions
 
-Tested with Python 3.5 - 3.8 against Django latest and LTS releases (1.11.29, 2.2.11, 3.0.4) as well as Flask 1.0 and 1.1.
+Tested with Python 3.x against Django latest and LTS releases as well as Flask 1.0 and 1.1.
 
 ## Getting Started
 
