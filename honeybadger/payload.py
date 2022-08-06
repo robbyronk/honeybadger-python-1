@@ -25,6 +25,12 @@ def error_payload(exception, exc_traceback, config):
         # for building a payload.
         return not ('honeybadger' in frame[0] and frame[2] in ['notify', '_send_notice', 'create_payload', 'error_payload'])
 
+    def prepare_exception_payload(exception, exclude=None):
+        return {
+            'class': type(exception) is dict and exception['error_class'] or exception.__class__.__name__,
+            'message': type(exception) is dict and exception['error_message'] or str(exception),
+            'backtrace': [dict(number=f[1], file=_filename(f[0]), method=f[2], source=read_source(f)) for f in reversed(tb)],
+        }
 
     if exc_traceback:
         tb = traceback.extract_tb(exc_traceback)
@@ -33,11 +39,8 @@ def error_payload(exception, exc_traceback, config):
 
     logger.debug(tb)
 
-    payload = {
-        'class': type(exception) is dict and exception['error_class'] or exception.__class__.__name__,
-        'message': type(exception) is dict and exception['error_message'] or str(exception),
-        'backtrace': [dict(number=f[1], file=_filename(f[0]), method=f[2], source=read_source(f)) for f in reversed(tb)]
-    }
+    payload = prepare_exception_payload(exception)
+    payload['causes'] = [prepare_exception_payload(exception.__cause__) ] if hasattr(exception, '__cause__') else []
 
     return payload
 
