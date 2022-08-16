@@ -69,6 +69,27 @@ def test_error_payload_source_missing_file(_isfile):
             dict(error_class='Exception', error_message='Test'), None, config)
         eq_(payload['backtrace'][0]['source'], {})
 
+def test_payload_captures_exception_cause():
+    with mock_traceback() as traceback_mock:
+        config = Configuration()
+        exception = Exception('Test')
+        exception.__cause__ = Exception('Exception cause')
+
+        payload = error_payload(exc_traceback=None, exception=exception,  config=config)
+        eq_(len(payload['causes']), 1)
+
+def test_error_payload_with_nested_exception():
+    with mock_traceback() as traceback_mock:
+        config = Configuration()
+        exception = Exception('Test')
+        exception_cause = Exception('Exception cause')
+        exception_cause.__cause__ = Exception('Nested')
+        exception.__cause__ = exception_cause
+
+        payload = error_payload(exc_traceback=None, exception=exception,  config=config)
+        eq_(len(payload['causes']), 2)
+
+
 
 def test_server_payload():
     config = Configuration(project_root=os.path.dirname(__file__), environment='test', hostname='test.local')

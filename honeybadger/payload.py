@@ -40,7 +40,12 @@ def error_payload(exception, exc_traceback, config):
     logger.debug(tb)
 
     payload = prepare_exception_payload(exception)
-    payload['causes'] = [prepare_exception_payload(exception.__cause__) ] if hasattr(exception, '__cause__') else []
+    payload['causes'] = []
+
+    # If exception has a __cause__, Recursively build the causes list.
+    while hasattr(exception, '__cause__') and exception.__cause__ is not None:
+            exception = exception.__cause__
+            payload['causes'].append(prepare_exception_payload(exception))
 
     return payload
 
