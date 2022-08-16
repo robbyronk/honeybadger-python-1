@@ -5,6 +5,16 @@ adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 - Recursively add nested exceptions to exception 'causes'
+
+## [0.8.0] - 2021-11-01
+### Added
+- Added `excluded_exceptions` config option (#98)
+
+## [0.7.1] - 2021-09-13
+### Fixed
+- Fixed post-python3.7 lambda bug: (#95, #97)
+  > Lambda function not wrapped by honeybadger: module 'main' has no attribute 'handle_http_request'
+
 ## [0.7.0] - 2021-08-16
 ### Added
 - Added log handler (#82)

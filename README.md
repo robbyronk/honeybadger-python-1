@@ -5,7 +5,7 @@ When any uncaught exceptions occur, Honeybadger will send the data off to the Ho
 
 ## Supported Versions
 
-Tested with Python 3.5 - 3.8 against Django latest and LTS releases (1.11.29, 2.2.11, 3.0.4) as well as Flask 1.0 and 1.1.
+Tested with Python 3.x against Django latest and LTS releases as well as Flask 1.0 and 1.1.
 
 ## Getting Started
 
@@ -49,9 +49,9 @@ A Flask extension is available for initializing and configuring Honeybadger: `ho
 - **url**: The URL the request was sent to.
 - **component**: The module that the view is defined at. If the view is a class-based view, then the name of the class is also added.
 - **action**: The name of the function called. If the action is defined within a blueprint, then the action name will have the name of the blueprint prefixed.
-- **params**: A dictionary containing query parameters and form data. If a variable is defined in both, then the form data are stored. Params are filtered (see [Configuration](#config)).
+- **params**: A dictionary containing query parameters and form data. If a variable is defined in both, then the form data are stored. Params are filtered (see [Configuration](#configuration)).
 - **session**: Session data.
-- **cgi_data**: Request headers, filtered (see [Configuration](#config)) and request method.
+- **cgi_data**: Request headers, filtered (see [Configuration](#configuration)) and request method.
 
 In addition, the `FlaskHoneybadger` extension:
 - Configures Honeybadger using Flask's [configuration object](http://flask.pocoo.org/docs/latest/config/#configuration-basics).
@@ -62,7 +62,7 @@ In addition, the `FlaskHoneybadger` extension:
 order for the extension to work, you'll have to install the `blinker` library as dependency.
 
 `FlaskHoneybadger` checks Flask's configuration object for automatically configuring honeybadger. In order to configure it, it checks for the
-keys with same name as the environment variables in [Configuration](#config) section. Note that if a value is also configured as an environment variable,
+keys with same name as the environment variables in [Configuration](#configuration) section. Note that if a value is also configured as an environment variable,
 then the environment variable's value will be used.
 
 #### Example
@@ -72,7 +72,7 @@ from flask import Flask, jsonify, request
 from honeybadger.contrib import FlaskHoneybadger
 
 app = Flask(__name__)
-app.config['HONEYBADGER_ENVIRONMENT'] = 'development'
+app.config['HONEYBADGER_ENVIRONMENT'] = 'production'
 app.config['HONEYBADGER_API_KEY'] = '<your key>'
 app.config['HONEYBADGER_PARAMS_FILTERS'] = 'password, secret, credit-card'
 FlaskHoneybadger(app, report_exceptions=True)
@@ -192,7 +192,7 @@ app.add_middleware(contrib.ASGIHoneybadger, params_filters=["dont-include-this"]
 
 Consuming the request body in an ASGI application's middleware is [problematic and discouraged](https://github.com/encode/starlette/issues/495#issuecomment-494008175). This is the reason why request body data won't be sent to the web UI.
 
-FastAPI allows overriding the logic used by the `Request` and `APIRoute` classes, by [using custom `APIRoute` classes](https://fastapi.tiangolo.com/advanced/custom-request-and-route/). This gives more control over the request body, and makes it possible to send request body data along with honeybadger notifications. 
+FastAPI allows overriding the logic used by the `Request` and `APIRoute` classes, by [using custom `APIRoute` classes](https://fastapi.tiangolo.com/advanced/custom-request-and-route/). This gives more control over the request body, and makes it possible to send request body data along with honeybadger notifications.
 
 A custom API Route is available at [`honeybadger.contrib.fastapi`](./honeybadger/contrib/fastapi):
 
@@ -230,7 +230,7 @@ Django and Flask are the only explicitly supported frameworks at the moment. For
 from honeybadger import honeybadger
 honeybadger.configure(api_key='myapikey')
 
-raise Exception, "This will get reported!"
+raise Exception("This will get reported!")
 ```
 
 ### All set!
@@ -332,6 +332,7 @@ The following options are available to you:
 | endpoint | `str` | `"https://api.honeybadger.io"` | `"https://honeybadger.example.com/"` | `HONEYBADGER_ENDPOINT` |
 | params_filters | `list` | `['password', 'password_confirmation', 'credit_card']` | `['super', 'secret', 'keys']` | `HONEYBADGER_PARAMS_FILTERS` |
 | force_report_data | `bool` | `False` | `True` | `HONEYBADGER_FORCE_REPORT_DATA` |
+| excluded_exceptions | `list` | `[]` | `['Http404', 'MyCustomIgnoredError']` | `HONEYBADGER_EXCLUDED_EXCEPTIONS`
 | force_sync | `bool` | `False` | `True` | `HONEYBADGER_FORCE_SYNC` |
 
 ## Public Methods
