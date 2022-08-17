@@ -20,15 +20,7 @@ jobs:
           fetch-depth: 0
           ref: master
 
-      - name: Setup Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.9'
-
-      - name: Install Deps
-        run: pip install --upgrade twine wheel
-
-      - name: Set Version in version.py
+      - name: Set package version in version.py
         run: echo "__version__ = '${{ github.events.inputs.version }}'" > honeybadger/version.py
 
       - name: Git Config
@@ -41,14 +33,27 @@ jobs:
           sed '6 a ## [0.9.0] - 2022-08-18' CHANGELOG.md
           sed '6 a  ' CHANGELOG.md
 
+      - name: Setup pyenv
+        uses: "gabrielfalcao/pyenv-action@v9"
+        with:
+          default: 2.7
+          versions: 2.7, 3.9
+
+      - name: Build for python 2
+        run: |
+          pyenv local 2.7 && python -mvenv .venv27
+          python setup.py bdist_wheel
+
+      - name: Build for python 3
+        run: |
+          pyenv local 3.9 && python3 -mvenv .venv39
+          python3 setup.py bdist_wheel
+
+      - name: Upload
+        run: twine upload -u ${{ secrets.PYPI_USERNAME }} -p ${{ secrets.PYPI_PASSWORD }} --non-interactive dist/*
+
       - name: Push version on git
         run: |
           git commit -m "Release ${{ github.events.inputs.version }}"
           git tag v${{ github.events.inputs.version }}
           git push origin master --tags
-
-      - name: Build
-        run: python setup.py bdist_wheel
-
-      - name: Upload
-        run: twine upload -u ${{ secrets.PYPI_USERNAME }} -p ${{ secrets.PYPI_PASSWORD }} --non-interactive dist/*
