@@ -20,27 +20,44 @@ jobs:
           fetch-depth: 0
           ref: master
 
-#      - name: Set package version in version.py
-#        run: echo "__version__ = '${{ github.events.inputs.version }}'" > honeybadger/version.py
+      - name: Set package version in version.py
+        run: |
+          echo "__version__ = '${{ github.events.inputs.version }}'" > honeybadger/version.py
+          cat honeybadger/version.py
 
-#      - name: Git Config
-#        run: |
-#          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-#          git config --global user.name "github-actions[bot]"
+      - name: Git Config
+        run: |
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
 
-#      - name: Update changelog
-#        run: |
-#          sed '6 a ## [0.9.0] - 2022-08-18' CHANGELOG.md
-#          sed '6 a  ' CHANGELOG.md
+      - name: Update changelog
+        run: |
+          sed '6 a ## [0.9.0] - 2022-08-18' CHANGELOG.md
+          sed '6 a  ' CHANGELOG.md
+          cat CHANGELOG.md
 
       - name: Install SSL lib
-        run: openssl version -a
+        run: |
+          which openssl
+          openssl version -a
+          sudo apt-get install libssl-dev
+          openssl version -a
+          which openssl
 
-#      - name: Setup pyenv
-#        uses: "gabrielfalcao/pyenv-action@v10"
-#        with:
-#          default: 2.7.9
-#          versions: 3.7.5
+      - name: Inspect Paths 1/2
+        run: ls /usr/include/openssl
+
+      - name: Inspect Paths 2/2
+        run: ls /usr/lib64
+
+      - name: Setup pyenv
+        uses: "gabrielfalcao/pyenv-action@v10"
+        env:
+          CPPFLAGS: "-I/usr/include/openssl"
+          LDFLAGS: "-L/usr/lib64"
+        with:
+          default: 2.7.9
+          versions: 3.7.5
 
 #      - name: Build for python 2
 #        run: |
