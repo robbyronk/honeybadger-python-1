@@ -33,25 +33,30 @@ jobs:
 #          sed '6 a ## [0.9.0] - 2022-08-18' CHANGELOG.md
 #          sed '6 a  ' CHANGELOG.md
 
-      - name: Setup pyenv
-        uses: "gabrielfalcao/pyenv-action@v10"
-        with:
-          default: 3.7.5
+      - name: Install SSL lib
+        run: openssl version -a
+
+#      - name: Setup pyenv
+#        uses: "gabrielfalcao/pyenv-action@v10"
+#        with:
+#          default: 2.7.9
+#          versions: 3.7.5
 
 #      - name: Build for python 2
 #        run: |
 #          pyenv local 2.7.9 && python -mvenv .venv279
+#          pip install --upgrade twine wheel
 #          python setup.py bdist_wheel
 #          python --version
 #          ls dist
 
-      - name: Build for python 3
-        run: |
-          pyenv local 3.7.5 && python3 -mvenv .venv375
-          pip3 install --upgrade twine wheel
-          python3 setup.py bdist_wheel
-          python3 --version
-          ls dist
+#      - name: Build for python 3
+#        run: |
+#          pyenv local 3.7.5 && python3 -mvenv .venv375
+#          pip3 install --upgrade twine wheel
+#          python3 setup.py bdist_wheel
+#          python3 --version
+#          ls dist
 
 #      - name: Upload
 #        env:
