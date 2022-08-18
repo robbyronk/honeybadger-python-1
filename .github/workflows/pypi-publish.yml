@@ -48,6 +48,7 @@ jobs:
       - name: Build for python 3
         run: |
           pyenv local 3.7.5 && python3 -mvenv .venv375
+          pip3 install --upgrade twine wheel
           python3 setup.py bdist_wheel
           python3 --version
           ls dist
