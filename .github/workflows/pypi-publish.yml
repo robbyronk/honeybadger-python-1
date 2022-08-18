@@ -40,30 +40,17 @@ jobs:
       - name: Inspect SSL lib
         run: openssl version -a
 
-      - name: Setup pyenv
-        uses: "gabrielfalcao/pyenv-action@v10"
-        env:
-          CPPFLAGS: "-I/usr/include/openssl"
-          LDFLAGS: "-L/usr/lib/ssl"
+      - name: Setup python
+        uses: actions/setup-python@v4
         with:
-          default: 2.7.9
-          versions: 3.7.5
+          python-version: '3.9'
 
-#      - name: Build for python 2
-#        run: |
-#          pyenv local 2.7.9 && python -mvenv .venv279
-#          pip install --upgrade twine wheel
-#          python setup.py bdist_wheel
-#          python --version
-#          ls dist
-
-#      - name: Build for python 3
-#        run: |
-#          pyenv local 3.7.5 && python3 -mvenv .venv375
-#          pip3 install --upgrade twine wheel
-#          python3 setup.py bdist_wheel
-#          python3 --version
-#          ls dist
+      - name: Build for python 3
+        run: |
+          pip install --upgrade twine wheel
+          python setup.py bdist_wheel
+          python --version
+          ls dist
 
 #      - name: Upload
 #        env:
