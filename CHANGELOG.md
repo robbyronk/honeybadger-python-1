@@ -4,6 +4,8 @@ CHANGELOG](http://keepachangelog.com/) for how to update this file. This project
 adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Added
+- Recursively add nested exceptions to exception 'causes'
 
 ## [0.8.0] - 2021-11-01
 ### Added
