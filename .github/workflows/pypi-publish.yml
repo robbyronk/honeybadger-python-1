@@ -56,6 +56,6 @@ jobs:
 
       - name: Push version on git
         run: |
-          git commit -m "Release ${{ inputs.version }}"
+          git commit -am "Release ${{ inputs.version }}"
           git tag v${{ inputs.version }}
           git push origin master --tags
