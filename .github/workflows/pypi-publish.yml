@@ -27,13 +27,13 @@ jobs:
 
       - name: Set package version in version.py
         run: |
-          echo "__version__ = '${{ github.events.inputs.version }}'" > honeybadger/version.py
+          echo "__version__ = '${{ inputs.version }}'" > honeybadger/version.py
           cat honeybadger/version.py
 
       - name: Update changelog
         run: |
           printf -v date '%(%Y-%m-%d)T\n' -1
-          sed -i "6 a ## [${{ github.events.inputs.version }}] - $date" CHANGELOG.md
+          sed -i "6 a ## [${{ inputs.version }}] - $date" CHANGELOG.md
           sed -i '/## \[Unreleased\]/{G;}' CHANGELOG.md
           cat CHANGELOG.md
 
@@ -73,6 +73,6 @@ jobs:
 
 #      - name: Push version on git
 #        run: |
-#          git commit -m "Release ${{ github.events.inputs.version }}"
-#          git tag v${{ github.events.inputs.version }}
+#          git commit -m "Release ${{ inputs.version }}"
+#          git tag v${{ inputs.version }}
 #          git push origin master --tags
