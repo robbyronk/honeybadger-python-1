@@ -37,25 +37,14 @@ jobs:
           sed -i '/## \[Unreleased\]/{G;}' CHANGELOG.md
           cat CHANGELOG.md
 
-      - name: Install SSL lib
-        run: |
-          which openssl
-          openssl version -a
-          sudo apt-get install libssl-dev
-          openssl version -a
-          which openssl
-
-      - name: Inspect Paths 1/2
-        run: ls /usr/include/openssl
-
-      - name: Inspect Paths 2/2
-        run: ls /usr/lib64
+      - name: Inspect SSL lib
+        run: openssl version -a
 
       - name: Setup pyenv
         uses: "gabrielfalcao/pyenv-action@v10"
         env:
           CPPFLAGS: "-I/usr/include/openssl"
-          LDFLAGS: "-L/usr/lib64"
+          LDFLAGS: "-L/usr/lib/ssl"
         with:
           default: 2.7.9
           versions: 3.7.5
