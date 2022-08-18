@@ -20,18 +20,18 @@ jobs:
           fetch-depth: 0
           ref: master
 
-      - name: Set package version in version.py
-        run: echo "__version__ = '${{ github.events.inputs.version }}'" > honeybadger/version.py
+#      - name: Set package version in version.py
+#        run: echo "__version__ = '${{ github.events.inputs.version }}'" > honeybadger/version.py
 
-      - name: Git Config
-        run: |
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git config --global user.name "github-actions[bot]"
+#      - name: Git Config
+#        run: |
+#          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+#          git config --global user.name "github-actions[bot]"
 
-      - name: Update changelog
-        run: |
-          sed '6 a ## [0.9.0] - 2022-08-18' CHANGELOG.md
-          sed '6 a  ' CHANGELOG.md
+#      - name: Update changelog
+#        run: |
+#          sed '6 a ## [0.9.0] - 2022-08-18' CHANGELOG.md
+#          sed '6 a  ' CHANGELOG.md
 
       - name: Setup pyenv
         uses: "gabrielfalcao/pyenv-action@v9"
@@ -43,17 +43,21 @@ jobs:
         run: |
           pyenv local 2.7 && python -mvenv .venv27
           python setup.py bdist_wheel
+          python --version
+          ls dist
 
       - name: Build for python 3
         run: |
           pyenv local 3.9 && python3 -mvenv .venv39
           python3 setup.py bdist_wheel
+          python3 --version
+          ls dist
 
-      - name: Upload
-        run: twine upload -u ${{ secrets.PYPI_USERNAME }} -p ${{ secrets.PYPI_PASSWORD }} --non-interactive dist/*
+#      - name: Upload
+#        run: twine upload -u ${{ secrets.PYPI_USERNAME }} -p ${{ secrets.PYPI_PASSWORD }} --non-interactive dist/*
 
-      - name: Push version on git
-        run: |
-          git commit -m "Release ${{ github.events.inputs.version }}"
-          git tag v${{ github.events.inputs.version }}
-          git push origin master --tags
+#      - name: Push version on git
+#        run: |
+#          git commit -m "Release ${{ github.events.inputs.version }}"
+#          git tag v${{ github.events.inputs.version }}
+#          git push origin master --tags
