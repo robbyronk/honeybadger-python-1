@@ -1,13 +1,12 @@
 name: Publish new version on PyPi
 
 on:
-  push:
   workflow_dispatch:
     inputs:
       version:
         type: string
         description: Version bump!
-        required: false
+        required: true
 
 jobs:
   publish:
