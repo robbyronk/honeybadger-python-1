@@ -48,14 +48,14 @@ jobs:
           python setup.py bdist_wheel
           ls dist
 
-#      - name: Upload
-#        env:
-#          TWINE_USERNAME: __token__
-#          TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
-#        run: twine upload dist/*
+      - name: Upload
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+        run: twine upload dist/*
 
-#      - name: Push version on git
-#        run: |
-#          git commit -m "Release ${{ inputs.version }}"
-#          git tag v${{ inputs.version }}
-#          git push origin master --tags
+      - name: Push version on git
+        run: |
+          git commit -m "Release ${{ inputs.version }}"
+          git tag v${{ inputs.version }}
+          git push origin master --tags
