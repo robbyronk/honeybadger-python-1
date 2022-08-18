@@ -32,8 +32,9 @@ jobs:
 
       - name: Update changelog
         run: |
-          sed '6 a ## [0.9.0] - 2022-08-18' CHANGELOG.md
-          sed '6 a  ' CHANGELOG.md
+          printf -v date '%(%Y-%m-%d)T\n' -1
+          sed -i "6 a ## [${{ github.events.inputs.version }}] - $date" CHANGELOG.md
+          sed -i '/## \[Unreleased\]/{G;}' CHANGELOG.md
           cat CHANGELOG.md
 
       - name: Install SSL lib
