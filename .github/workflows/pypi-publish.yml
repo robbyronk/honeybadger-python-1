@@ -34,10 +34,10 @@ jobs:
 #          sed '6 a  ' CHANGELOG.md
 
       - name: Setup pyenv
-        uses: "gabrielfalcao/pyenv-action@v9"
+        uses: "gabrielfalcao/pyenv-action@v10"
         with:
           default: 2.7.9
-          versions: 2.7.9, 3.7.5
+          versions: 3.7.5
 
       - name: Build for python 2
         run: |
@@ -54,7 +54,10 @@ jobs:
           ls dist
 
 #      - name: Upload
-#        run: twine upload -u ${{ secrets.PYPI_USERNAME }} -p ${{ secrets.PYPI_PASSWORD }} --non-interactive dist/*
+#        env:
+#          TWINE_USERNAME: __token__
+#          TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+#        run: twine upload dist/*
 
 #      - name: Push version on git
 #        run: |
