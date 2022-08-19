@@ -434,6 +434,13 @@ See https://github.com/honeybadger-io/honeybadger-python/blob/master/CHANGELOG.m
 
 ## Publishing a release on PyPI
 
+### Github Workflow
+
+A new version can be published on PyPi using the [Publish new version on PyPi](.github/workflows/pypi-publish.yml) workflow.
+The workflow can be triggered manually from the Github Actions page and takes a version input.
+
+### Manual Release 
+
 1. Ensure the latest version of twine is installed with `pip install --upgrade twine wheel`
 1. Update the version in [honeybadger/version.py](./honeybadger/version.py)
 1. Update unreleased heading in [CHANGELOG.md](./CHANGELOG.md)
@@ -442,7 +449,6 @@ See https://github.com/honeybadger-io/honeybadger-python/blob/master/CHANGELOG.m
 1. Tag changes: `git tag v[version]`, i.e.: `git tag v0.3.0`
 1. Push changes to GitHub: `git push origin master --tags`
 1. Clean out the existing dist dir with `rm -rf dist/`
-1. Run `python setup.py bdist_wheel` which will build the python2 package in dist/
 1. Run `python3 setup.py bdist_wheel` which will build the python3 package in dist/
 1. Run `twine upload dist/*` to upload the release to PyPI
 
