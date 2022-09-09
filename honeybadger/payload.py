@@ -31,7 +31,7 @@ def error_payload(exception, exc_traceback, config, context=None):
             'message': type(exception) is dict and exception['error_message'] or str(exception),
             'backtrace': [dict(number=f[1], file=_filename(f[0]), method=f[2], source=read_source(f)) for f in reversed(tb)],
         }
-        fingerprint = type(context) is dict and context.get('fingerprint')
+        fingerprint = type(context) is dict and context.pop('fingerprint', None)
         result['fingerprint'] = fingerprint and str(fingerprint).strip() or None
 
         return result
