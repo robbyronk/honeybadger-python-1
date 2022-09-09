@@ -13,7 +13,7 @@ from .plugins import default_plugin_manager
 logger = logging.getLogger('honeybadger.payload')
 
 
-def error_payload(exception, exc_traceback, config):
+def error_payload(exception, exc_traceback, config, context=None):
     def _filename(name):
         return name.replace(config.project_root, '[PROJECT_ROOT]')
 
@@ -26,11 +26,15 @@ def error_payload(exception, exc_traceback, config):
         return not ('honeybadger' in frame[0] and frame[2] in ['notify', '_send_notice', 'create_payload', 'error_payload'])
 
     def prepare_exception_payload(exception, exclude=None):
-        return {
+        result = {
             'class': type(exception) is dict and exception['error_class'] or exception.__class__.__name__,
             'message': type(exception) is dict and exception['error_message'] or str(exception),
             'backtrace': [dict(number=f[1], file=_filename(f[0]), method=f[2], source=read_source(f)) for f in reversed(tb)],
         }
+        fingerprint = type(context) is dict and context.get('fingerprint')
+        result['fingerprint'] = fingerprint and str(fingerprint).strip() or None
+
+        return result
 
     if exc_traceback:
         tb = traceback.extract_tb(exc_traceback)
@@ -70,7 +74,7 @@ def server_payload(config):
         'pid': os.getpid(),
         'stats': stats_payload()
     }
-    
+
 
 def stats_payload():
     try:
@@ -102,7 +106,7 @@ def stats_payload():
 def create_payload(exception, exc_traceback=None, config=None, context=None):
     if exc_traceback is None:
         exc_traceback = sys.exc_info()[2]
-    
+
     #if context is None, Initialize as an emptty dict
     if not context:
         context = {}
@@ -113,10 +117,10 @@ def create_payload(exception, exc_traceback=None, config=None, context=None):
             'url': "https://github.com/honeybadger-io/honeybadger-python",
             'version': __version__
         },
-        'error':  error_payload(exception, exc_traceback, config),
+        'error':  error_payload(exception, exc_traceback, config, context),
         'server': server_payload(config),
         'request': {'context':context}
     }
 
     return default_plugin_manager.generate_payload(payload, config, context)
-    
+

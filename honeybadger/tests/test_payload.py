@@ -85,11 +85,29 @@ def test_error_payload_with_nested_exception():
         exception_cause = Exception('Exception cause')
         exception_cause.__cause__ = Exception('Nested')
         exception.__cause__ = exception_cause
-
         payload = error_payload(exc_traceback=None, exception=exception,  config=config)
         eq_(len(payload['causes']), 2)
 
+def test_error_payload_with_fingerprint():
+    config = Configuration()
+    exception = Exception('Test')
+    context = {'fingerprint': 'a fingerprint'}
+    payload = error_payload(exception, exc_traceback=None, config=config, context=context)
+    eq_(payload['fingerprint'], 'a fingerprint')
 
+def test_error_payload_with_fingerprint_as_type():
+    config = Configuration()
+    exception = Exception('Test')
+    context = {'fingerprint': {'a': 1, 'b': 2}}
+    payload = error_payload(exception, exc_traceback=None, config=config, context=context)
+    eq_(payload['fingerprint'], "{'a': 1, 'b': 2}")
+
+def test_error_payload_without_fingerprint():
+    config = Configuration()
+    exception = Exception('Test')
+    context = {}
+    payload = error_payload(exception, exc_traceback=None, config=config, context=context)
+    eq_(payload['fingerprint'], None)
 
 def test_server_payload():
     config = Configuration(project_root=os.path.dirname(__file__), environment='test', hostname='test.local')
