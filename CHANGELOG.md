@@ -4,6 +4,8 @@ CHANGELOG](http://keepachangelog.com/) for how to update this file. This project
 adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+## [0.10.0] - 2022-09-09
 ### Added
 - Allow passing fingerprint in `notify()` (#115)
 
