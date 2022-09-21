@@ -104,7 +104,7 @@ def test_error_payload_without_fingerprint():
     config = Configuration()
     exception = Exception('Test')
     payload = error_payload(exception, exc_traceback=None, config=config)
-    eq_(payload['fingerprint'], None)
+    eq_(payload.get('fingerprint'), None)
 
 def test_server_payload():
     config = Configuration(project_root=os.path.dirname(__file__), environment='test', hostname='test.local')
