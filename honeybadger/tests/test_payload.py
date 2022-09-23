@@ -91,23 +91,20 @@ def test_error_payload_with_nested_exception():
 def test_error_payload_with_fingerprint():
     config = Configuration()
     exception = Exception('Test')
-    context = {'fingerprint': 'a fingerprint'}
-    payload = error_payload(exception, exc_traceback=None, config=config, context=context)
+    payload = error_payload(exception, exc_traceback=None, config=config, fingerprint='a fingerprint')
     eq_(payload['fingerprint'], 'a fingerprint')
 
 def test_error_payload_with_fingerprint_as_type():
     config = Configuration()
     exception = Exception('Test')
-    context = {'fingerprint': {'a': 1, 'b': 2}}
-    payload = error_payload(exception, exc_traceback=None, config=config, context=context)
+    payload = error_payload(exception, exc_traceback=None, config=config, fingerprint={'a': 1, 'b': 2})
     eq_(payload['fingerprint'], "{'a': 1, 'b': 2}")
 
 def test_error_payload_without_fingerprint():
     config = Configuration()
     exception = Exception('Test')
-    context = {}
-    payload = error_payload(exception, exc_traceback=None, config=config, context=context)
-    eq_(payload['fingerprint'], None)
+    payload = error_payload(exception, exc_traceback=None, config=config)
+    eq_(payload.get('fingerprint'), None)
 
 def test_server_payload():
     config = Configuration(project_root=os.path.dirname(__file__), environment='test', hostname='test.local')

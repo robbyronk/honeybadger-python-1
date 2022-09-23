@@ -4,6 +4,8 @@ CHANGELOG](http://keepachangelog.com/) for how to update this file. This project
 adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Fixed
+- Make fingerprint a top-level function parameter (#115)
 
 ## [0.10.0] - 2022-09-09
 ### Added

@@ -13,7 +13,7 @@ from .plugins import default_plugin_manager
 logger = logging.getLogger('honeybadger.payload')
 
 
-def error_payload(exception, exc_traceback, config, context=None):
+def error_payload(exception, exc_traceback, config, fingerprint=None):
     def _filename(name):
         return name.replace(config.project_root, '[PROJECT_ROOT]')
 
@@ -26,15 +26,11 @@ def error_payload(exception, exc_traceback, config, context=None):
         return not ('honeybadger' in frame[0] and frame[2] in ['notify', '_send_notice', 'create_payload', 'error_payload'])
 
     def prepare_exception_payload(exception, exclude=None):
-        result = {
+        return {
             'class': type(exception) is dict and exception['error_class'] or exception.__class__.__name__,
             'message': type(exception) is dict and exception['error_message'] or str(exception),
             'backtrace': [dict(number=f[1], file=_filename(f[0]), method=f[2], source=read_source(f)) for f in reversed(tb)],
         }
-        fingerprint = type(context) is dict and context.pop('fingerprint', None)
-        result['fingerprint'] = fingerprint and str(fingerprint).strip() or None
-
-        return result
 
     if exc_traceback:
         tb = traceback.extract_tb(exc_traceback)
@@ -44,6 +40,10 @@ def error_payload(exception, exc_traceback, config, context=None):
     logger.debug(tb)
 
     payload = prepare_exception_payload(exception)
+
+    if fingerprint is not None:
+        payload['fingerprint'] = fingerprint and str(fingerprint).strip() or None
+
     payload['causes'] = []
 
     # If exception has a __cause__, Recursively build the causes list.
@@ -117,9 +117,9 @@ def create_payload(exception, exc_traceback=None, config=None, context=None):
             'url': "https://github.com/honeybadger-io/honeybadger-python",
             'version': __version__
         },
-        'error':  error_payload(exception, exc_traceback, config, context),
+        'error':  error_payload(exception, exc_traceback, config),
         'server': server_payload(config),
-        'request': {'context':context}
+        'request': {'context': context}
     }
 
     return default_plugin_manager.generate_payload(payload, config, context)
