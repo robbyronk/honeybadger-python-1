@@ -389,7 +389,7 @@ honeybadger.configure(api_key='myapikey', project_root='/home/dave/crywolf-djang
 In cases where you'd like to manually send error notices to Honeybadger, this is what you're looking for. You can either pass it an exception as the first argument, or an `error_class`/`error_message` pair of keyword arguments.
 You can also pass it a:
 - custom context dictionary which will get merged with the global context
-- a `fingerprint` to customize the [error grouping](https://docs.honeybadger.io/guides/errors/#error-grouping)
+- `fingerprint` option to customize the [error grouping](https://docs.honeybadger.io/guides/errors/#error-grouping)
 
 #### Examples:
 
