@@ -103,7 +103,7 @@ def stats_payload():
 
         return payload
 
-def create_payload(exception, exc_traceback=None, config=None, context=None):
+def create_payload(exception, exc_traceback=None, config=None, context=None, fingerprint=None):
     if exc_traceback is None:
         exc_traceback = sys.exc_info()[2]
 
@@ -117,7 +117,7 @@ def create_payload(exception, exc_traceback=None, config=None, context=None):
             'url': "https://github.com/honeybadger-io/honeybadger-python",
             'version': __version__
         },
-        'error':  error_payload(exception, exc_traceback, config),
+        'error':  error_payload(exception, exc_traceback, config, fingerprint),
         'server': server_payload(config),
         'request': {'context': context}
     }
