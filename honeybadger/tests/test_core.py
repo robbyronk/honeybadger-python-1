@@ -76,7 +76,18 @@ def test_notify_with_custom_params():
         hb.configure(api_key='aaa', force_report_data=True)
         hb.notify(error_class='Exception', error_message='Test message.', context={'foo': 'bar'})
 
+def test_notify_with_fingerprint():
+    def test_payload(request):
+        payload = json.loads(request.data.decode('utf-8'))
+        eq_(payload['error']['class'], 'Exception')
+        eq_(payload['error']['fingerprint'], 'custom_fingerprint')
+        eq_(payload['error']['message'], 'Test message.')
 
+    hb = Honeybadger()
+
+    with mock_urlopen(test_payload) as request_mock:
+        hb.configure(api_key='aaa', force_report_data=True)
+        hb.notify(error_class='Exception', error_message='Test message.', fingerprint='custom_fingerprint')
 
 def test_notify_with_exception():
     def test_payload(request):
