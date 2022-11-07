@@ -4,12 +4,15 @@ from contextlib import contextmanager
 import os
 import sys
 
-from honeybadger.payload import error_payload
-from honeybadger.payload import server_payload
+from honeybadger.payload import (
+    create_payload, 
+    error_payload, 
+    server_payload
+)
 from honeybadger.config import Configuration
 
 from mock import patch
-from nose.tools import eq_, ok_
+from nose.tools import eq_, ok_, assert_raises
 
 # TODO: figure out how to run Django tests?
 
@@ -123,3 +126,11 @@ def test_psutil_is_optional():
     with patch.dict(sys.modules, {'psutil':None}):
         payload = server_payload(config)
         eq_(payload['stats'], {})
+
+def test_create_payload():
+    config = Configuration()
+    with assert_raises(Exception):
+        test_local_variable = {"test": "var"}
+        exception = Exception('Test')
+        payload = create_payload(exception, config=config)
+        eq_(payload['request']['local_variables'], test_local_variable)
