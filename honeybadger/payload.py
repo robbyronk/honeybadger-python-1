@@ -2,6 +2,7 @@ import sys
 import traceback
 import os
 import logging
+import inspect
 from six.moves import range
 from six.moves import zip
 from io import open
@@ -107,6 +108,12 @@ def create_payload(exception, exc_traceback=None, config=None, context=None, fin
     if exc_traceback is None:
         exc_traceback = sys.exc_info()[2]
 
+    # try and get local variables from stacktrace 
+    try:
+        local_variables = inspect.trace()[-1][0].f_locals
+    except Exception:
+        local_variables = None
+
     #if context is None, Initialize as an emptty dict
     if not context:
         context = {}
@@ -119,7 +126,10 @@ def create_payload(exception, exc_traceback=None, config=None, context=None, fin
         },
         'error':  error_payload(exception, exc_traceback, config, fingerprint),
         'server': server_payload(config),
-        'request': {'context': context}
+        'request': {
+            'context': context,
+            'local_variables': local_variables
+        }
     }
 
     return default_plugin_manager.generate_payload(payload, config, context)
