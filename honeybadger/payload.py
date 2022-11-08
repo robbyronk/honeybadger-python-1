@@ -10,7 +10,7 @@ from datetime import datetime
 
 from .version import __version__
 from .plugins import default_plugin_manager
-
+from .utils import filter_dict
 logger = logging.getLogger('honeybadger.payload')
 
 
@@ -105,14 +105,18 @@ def stats_payload():
         return payload
 
 def create_payload(exception, exc_traceback=None, config=None, context=None, fingerprint=None):
+    # if using local_variables get them
+    local_variables = None
+    if config and config.is_using_local_variables:
+        try:
+            local_variables = filter_dict(
+                inspect.trace()[-1][0].f_locals, config.params_filters
+            )
+        except Exception as e:
+            pass
+
     if exc_traceback is None:
         exc_traceback = sys.exc_info()[2]
-
-    # try and get local variables from stacktrace 
-    try:
-        local_variables = inspect.trace()[-1][0].f_locals
-    except Exception:
-        local_variables = None
 
     #if context is None, Initialize as an emptty dict
     if not context:

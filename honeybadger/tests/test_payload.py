@@ -127,16 +127,17 @@ def test_psutil_is_optional():
         payload = server_payload(config)
         eq_(payload['stats'], {})
 
-def test_create_payload_with_local_variables():
+def test_create_payload_without_local_variables():
     config = Configuration()
+    exception = Exception('Test')
+    payload = create_payload(exception, config=config)
+    eq_(payload['request'].get('local_variables'), None)
+
+
+def test_create_payload_with_local_variables():
+    config = Configuration(is_using_local_variables=True)
     with assert_raises(Exception):
         test_local_variable = {"test": "var"}
         exception = Exception('Test')
         payload = create_payload(exception, config=config)
         eq_(payload['request']['local_variables'], test_local_variable)
-    
-def test_create_payload_without_local_cvariables():
-    config = Configuration()
-    exception = Exception('Test')
-    payload = create_payload(exception, config=config)
-    eq_(payload['request']['local_variables'], None)
