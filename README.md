@@ -334,6 +334,8 @@ The following options are available to you:
 | force_report_data | `bool` | `False` | `True` | `HONEYBADGER_FORCE_REPORT_DATA` |
 | excluded_exceptions | `list` | `[]` | `['Http404', 'MyCustomIgnoredError']` | `HONEYBADGER_EXCLUDED_EXCEPTIONS`
 | force_sync | `bool` | `False` | `True` | `HONEYBADGER_FORCE_SYNC` |
+| report_local_variables | `bool` | `False` | `True` | `HONEYBADGER_REPORT_LOCAL_VARIABLES` |
+
 
 ## Public Methods
 

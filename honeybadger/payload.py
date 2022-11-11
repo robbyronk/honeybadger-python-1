@@ -107,7 +107,7 @@ def stats_payload():
 def create_payload(exception, exc_traceback=None, config=None, context=None, fingerprint=None):
     # if using local_variables get them
     local_variables = None
-    if config and config.is_using_local_variables:
+    if config and config.report_local_variables:
         try:
             local_variables = filter_dict(
                 inspect.trace()[-1][0].f_locals, config.params_filters
