@@ -2,6 +2,7 @@ import sys
 import traceback
 import os
 import logging
+import inspect
 from six.moves import range
 from six.moves import zip
 from io import open
@@ -9,7 +10,7 @@ from datetime import datetime
 
 from .version import __version__
 from .plugins import default_plugin_manager
-
+from .utils import filter_dict
 logger = logging.getLogger('honeybadger.payload')
 
 
@@ -104,6 +105,16 @@ def stats_payload():
         return payload
 
 def create_payload(exception, exc_traceback=None, config=None, context=None, fingerprint=None):
+    # if using local_variables get them
+    local_variables = None
+    if config and config.report_local_variables:
+        try:
+            local_variables = filter_dict(
+                inspect.trace()[-1][0].f_locals, config.params_filters
+            )
+        except Exception as e:
+            pass
+
     if exc_traceback is None:
         exc_traceback = sys.exc_info()[2]
 
@@ -119,7 +130,10 @@ def create_payload(exception, exc_traceback=None, config=None, context=None, fin
         },
         'error':  error_payload(exception, exc_traceback, config, fingerprint),
         'server': server_payload(config),
-        'request': {'context': context}
+        'request': {
+            'context': context,
+            'local_variables': local_variables
+        }
     }
 
     return default_plugin_manager.generate_payload(payload, config, context)
