@@ -242,8 +242,8 @@ from honeybadger.contrib import CeleryHoneybadger
 
 app = Celery(__name__)
 app.conf.update(
-  HONEYBADGER_API_KEY= 'production',
-  HONEYBADGER_ENVIRONMENT= '<your key>'
+  HONEYBADGER_API_KEY= '<your key>',
+  HONEYBADGER_ENVIRONMENT= 'production'
 )
 CeleryHoneybadger(app, report_exceptions=True)
 ```
