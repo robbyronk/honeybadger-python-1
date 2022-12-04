@@ -58,17 +58,17 @@ class CeleryHoneybadger(object):
             task_failure.connect(self._on_task_failure, weak=False)
         task_postrun.connect(self._on_task_postrun, weak=False)
 
-    def _on_task_postrun(self, *args, **kw):
+    def _on_task_postrun(self, *args, **kwargs):
         """
         Callback executed after a task is finished.
         """
         honeybadger.reset_context()
 
-    def _on_task_failure(self, *args, **kw):
+    def _on_task_failure(self, *args, **kwargs):
         """
         Report exception to honeybadger when a task fails.
         """
-        honeybadger.notify(exception=kw["exception"])
+        honeybadger.notify(exception=kwargs["exception"])
 
     def _initialize_honeybadger(self, config):
         """

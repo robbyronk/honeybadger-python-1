@@ -222,6 +222,32 @@ app = Starlette()
 app.add_middleware(contrib.ASGIHoneybadger)
 ```
 
+### Celery
+
+A Celery extension is available for initializing and configuring Honeybadger: `honeybadger.contrib.celery.CeleryHoneybadger`. The extension adds the following information to reported exceptions:
+
+- **component**: The module that the task is defined at.
+- **action**: The name of the task.
+- **params**: The arguments and keyword arguments passed to the task.
+- **context**: A dictionary containing the following:
+  - **task_id**: The id of the current task.
+  - **retries**: The number of retries that have been attempted.
+  - **max_retries**: The maximum number of retries that will be attempted.
+
+#### Example
+
+```python
+from celery import Celery
+from honeybadger.contrib import CeleryHoneybadger
+
+app = Celery(__name__)
+app.conf.update(
+  HONEYBADGER_API_KEY= 'production',
+  HONEYBADGER_ENVIRONMENT= '<your key>'
+)
+CeleryHoneybadger(app, report_exceptions=True)
+```
+  
 ### Other frameworks / plain Python app
 
 Django and Flask are the only explicitly supported frameworks at the moment. For other frameworks (tornado, web2py, etc.) or a plain Python script, simply import honeybadger and configure it with your API key. Honeybadger uses a global exception hook to automatically report any uncaught exceptions.
