@@ -6,6 +6,7 @@ adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 ### Added
 - Add Celery integration. (#124)
+
 ## [0.13.0] - 2022-11-11
 
 ## [0.12.0] - 2022-10-04
