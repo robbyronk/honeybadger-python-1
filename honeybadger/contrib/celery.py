@@ -1,14 +1,13 @@
-from celery import current_task
-from celery.signals import task_failure, task_postrun
 from honeybadger import honeybadger
 from honeybadger.plugins import Plugin, default_plugin_manager
-
 
 class CeleryPlugin(Plugin):
     def __init__(self):
         super().__init__("Celery")
 
     def supports(self, config, context):
+        from celery import current_task
+
         """
         Check whether this is a a celery task or not.
         :param config: honeybadger configuration.
@@ -24,6 +23,8 @@ class CeleryPlugin(Plugin):
         :param config: honeybadger configuration.
         :return: a dict with the generated payload.
         """
+        from celery import current_task
+
         payload = {
             "component": current_task.__module__,
             "action": current_task.name,
@@ -53,6 +54,8 @@ class CeleryHoneybadger(object):
         """
         Initialize honeybadger and listen for errors.
         """
+        from celery.signals import task_failure, task_postrun
+
         self._initialize_honeybadger(self.app.conf)
         if self.report_exceptions:
             task_failure.connect(self._on_task_failure, weak=False)
@@ -89,6 +92,8 @@ class CeleryHoneybadger(object):
         """
         Disconnects celery signals.
         """
+        from celery.signals import task_failure, task_postrun
+
         task_postrun.disconnect(self._on_task_postrun)
         if self.report_exceptions:
             task_failure.disconnect(self._on_task_failure)
