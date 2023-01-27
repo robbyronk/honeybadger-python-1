@@ -17,7 +17,7 @@ Install honeybadger with pip.
 
 `$ pip install honeybadger`
 
-**Note:** Honeybadger does *not* report errors in development and test
+**Note:** Honeybadger does *not* report errors in `development` and `test`
 environments by default. To enable reporting in development environments, see
 the `force_report_data` setting.
 
@@ -349,19 +349,20 @@ All of Honeybadger's configuration options can also be set via environment varia
 
 The following options are available to you:
 
-|  Name | Type | Default | Example | Environment variable |
-| ----- | ---- | ------- | ------- | -------------------- |
-| api_key | `str` | `""` | `"badgers"` | `HONEYBADGER_API_KEY` |
-| project_root | `str` | The current working directory | `"/path/to/project"` | `HONEYBADGER_PROJECT_ROOT` |
-| environment | `str` | `"production"` | `"staging"` | `HONEYBADGER_ENVIRONMENT` |
-| hostname | `str` | The hostname of the current server. | `"badger01"` | `HONEYBADGER_HOSTNAME` |
-| endpoint | `str` | `"https://api.honeybadger.io"` | `"https://honeybadger.example.com/"` | `HONEYBADGER_ENDPOINT` |
-| params_filters | `list` | `['password', 'password_confirmation', 'credit_card']` | `['super', 'secret', 'keys']` | `HONEYBADGER_PARAMS_FILTERS` |
-| force_report_data | `bool` | `False` | `True` | `HONEYBADGER_FORCE_REPORT_DATA` |
-| excluded_exceptions | `list` | `[]` | `['Http404', 'MyCustomIgnoredError']` | `HONEYBADGER_EXCLUDED_EXCEPTIONS`
-| force_sync | `bool` | `False` | `True` | `HONEYBADGER_FORCE_SYNC` |
-| report_local_variables | `bool` | `False` | `True` | `HONEYBADGER_REPORT_LOCAL_VARIABLES` |
+| Name                   | Type   | Default                                                | Example                               | Environment variable                 |
+|------------------------|--------|--------------------------------------------------------|---------------------------------------|--------------------------------------|
+| api_key                | `str`  | `""`                                                   | `"badgers"`                           | `HONEYBADGER_API_KEY`                |
+| project_root           | `str`  | The current working directory                          | `"/path/to/project"`                  | `HONEYBADGER_PROJECT_ROOT`           |
+| environment[^1]        | `str`  | `"production"`                                         | `"staging"`                           | `HONEYBADGER_ENVIRONMENT`            |
+| hostname               | `str`  | The hostname of the current server.                    | `"badger01"`                          | `HONEYBADGER_HOSTNAME`               |
+| endpoint               | `str`  | `"https://api.honeybadger.io"`                         | `"https://honeybadger.example.com/"`  | `HONEYBADGER_ENDPOINT`               |
+| params_filters         | `list` | `['password', 'password_confirmation', 'credit_card']` | `['super', 'secret', 'keys']`         | `HONEYBADGER_PARAMS_FILTERS`         |
+| force_report_data      | `bool` | `False`                                                | `True`                                | `HONEYBADGER_FORCE_REPORT_DATA`      |
+| excluded_exceptions    | `list` | `[]`                                                   | `['Http404', 'MyCustomIgnoredError']` | `HONEYBADGER_EXCLUDED_EXCEPTIONS`    |
+| force_sync             | `bool` | `False`                                                | `True`                                | `HONEYBADGER_FORCE_SYNC`             |
+| report_local_variables | `bool` | `False`                                                | `True`                                | `HONEYBADGER_REPORT_LOCAL_VARIABLES` |
 
+[^1]: Honeybadger will try to infer the correct environment when possible. For example, in the case of the Django integration, if Django settings are set to `DEBUG = True`, the environment will default to `development`.  
 
 ## Public Methods
 
