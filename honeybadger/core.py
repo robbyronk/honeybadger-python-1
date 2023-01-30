@@ -1,14 +1,14 @@
+import copy
+import logging
+import sys
 import threading
 from contextlib import contextmanager
-import sys
-import logging
-import copy
 
-from honeybadger.plugins import default_plugin_manager
 import honeybadger.connection as connection
 import honeybadger.fake_connection as fake_connection
-from .payload import create_payload
+from honeybadger.plugins import default_plugin_manager
 from .config import Configuration
+from .payload import create_payload
 
 logging.getLogger('honeybadger').addHandler(logging.NullHandler())
 
@@ -42,7 +42,7 @@ class Honeybadger(object):
 
     def notify(self, exception=None, error_class=None, error_message=None, context={}, fingerprint=None):
         if exception and exception.__class__.__name__ in self.config.excluded_exceptions:
-            return #Terminate the function
+            return  # Terminate the function
 
         if exception is None:
             exception = {
@@ -61,16 +61,20 @@ class Honeybadger(object):
         self.auto_discover_plugins()
 
     def auto_discover_plugins(self):
-        #Avoiding circular import error
+        # Avoiding circular import error
         from honeybadger import contrib
 
         if self.config.is_aws_lambda_environment:
             default_plugin_manager.register(contrib.AWSLambdaPlugin())
 
-    def set_context(self, **kwargs):
+    def set_context(self, ctx: dict = None, **kwargs):
         # This operation is an update, not a set!
+        if not ctx:
+            ctx = kwargs
+        else:
+            ctx.update(kwargs)
         self.thread_local.context = self._get_context()
-        self.thread_local.context.update(kwargs)
+        self.thread_local.context.update(ctx)
 
     def reset_context(self):
         self.thread_local.context = {}
